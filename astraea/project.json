@@ -1,0 +1,53 @@
+{
+  "name": "astraea",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "astraea/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/astraea",
+        "main": "astraea/src/main.ts",
+        "tsConfig": "astraea/tsconfig.app.json",
+        "assets": ["astraea/src/assets"],
+        "webpackConfig": "astraea/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "astraea:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "astraea:build:development"
+        },
+        "production": {
+          "buildTarget": "astraea:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "astraea/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
