@@ -3,9 +3,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { BehaviorSubject } from 'rxjs';
-import { AuthResponse } from '@supabase/supabase-js';
 
 import { PublicUser } from '@shared/models/public-user';
+import { getRouteUrl } from '../../utils';
+
+import { environment } from 'ikaros/src/environments/environment';
+import { ApiEndpoints } from '../../constants';
 
 @Injectable({
   // To make sure its a singleton service
@@ -14,6 +17,8 @@ import { PublicUser } from '@shared/models/public-user';
 export class AuthService {
   userSignedIn$ = new BehaviorSubject<boolean>(false);
   userPublicProfile$ = new BehaviorSubject<PublicUser | null>(null);
+
+  BACKEND_API = environment.api;
 
   private readonly http = inject(HttpClient);
 
@@ -27,7 +32,11 @@ export class AuthService {
   async login(email: string, password: string): Promise<void> {
     const body = { email, password };
 
-    this.http.post(`/api/auth/login`, body).subscribe({
+    const url = getRouteUrl(this.BACKEND_API, ApiEndpoints.Auth.Login);
+    console.log("Body: ", body);
+    console.log("Request: ", url);
+
+    this.http.post(getRouteUrl(this.BACKEND_API, ApiEndpoints.Auth.Login), body).subscribe({
       next: (res) => {
         console.log("Response: ", res);
       },

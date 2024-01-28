@@ -1,5 +1,8 @@
 export const environment = {
   production: true,
-  supabaseUrl: process.env["SUPABASE_URL"],
-  supabaseKey: process.env["SUPABASE_ANON_KEY"],
-}
+  api: 'https://ikaros-astraea.up.railway.app/api',
+  supabase: {
+    url: '%SUPABASE_URL%',
+    key: '%SUPABASE_ANON_KEY%',
+  },
+};

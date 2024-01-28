@@ -2,7 +2,10 @@
   "name": "@ikaros/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "node prebuild.js && nx run-many --target=serve --projects=ikaros,astraea --parallel",
+    "build": "nx run-many --target=build --projects=ikaros,astraea --parallel"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "~17.0.0",
@@ -102,6 +105,7 @@
     "axios": "^1.0.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
+    "dotenv": "^16.4.1",
     "express": "~4.18.2",
     "ngx-scrollbar": "^13.0.1",
     "reflect-metadata": "^0.1.13",

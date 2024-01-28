@@ -51,9 +51,6 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
-      "options": {
-        "proxyConfig": "ikaros/src/proxy.conf.json"
-      },
       "configurations": {
         "production": {
           "buildTarget": "ikaros:build:production"
