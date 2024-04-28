@@ -8,7 +8,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, getDate, isDateFilterEmpty } from '@/lib/utils';
-import { DateFilter, DateFilterOption } from '@/models/library-settings.schema';
+import { DateFilter, DateFilterOption } from '@/models/library-settings';
 import { useLibrarySettingsStore } from '@/store/useLibraryStore';
 
 enum DateOption {

@@ -13,14 +13,19 @@ const defaultSettings: LibrarySettings = {
 type LibrarySettingsStore = {
 	settings: LibrarySettings;
 	getSettingCount: () => number;
+	updateTitle: (title: string) => void;
+  updateAuthor: (author: string) => void;
 	flushSettings: () => void;
 	updateSetting: <K extends keyof LibrarySettings>(key: K, value: LibrarySettings[K]) => void;
 	updateDateFilter: (option: DateFilterOption, filter?: DateFilter) => void;
+  updateSortOption: (sortOption: SortOption) => void;
 	toggleSortDirection: () => void;
 };
 
 export const useLibrarySettingsStore = create<LibrarySettingsStore>((set, get) => ({
 	settings: defaultSettings,
+	updateTitle: (title: string) => set((state) => ({settings: {...state.settings, title}})),
+  updateAuthor: (author: string) => set((state) => ({settings: {...state.settings, author}})),
 	getSettingCount: () => {
     	let count = get().settings.title ? 1 : 0;
     	count += get().settings.author ? 1 : 0;
@@ -39,6 +44,8 @@ export const useLibrarySettingsStore = create<LibrarySettingsStore>((set, get) =
 
 			return { settings: { ...state.settings, dateFilters: newDateFilters } };
 		}),
+	updateSortOption: (sortOption) =>
+		set((state) => ({settings: {...state.settings, sortOption}})),
 	toggleSortDirection: () =>
 		set((state) => ({
 			settings: {

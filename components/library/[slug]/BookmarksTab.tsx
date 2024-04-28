@@ -1,4 +1,4 @@
-import { Novel } from '@/models/novel.schema'
+import { Novel } from '@/models/novel'
 import React from 'react'
 
 function BookmarksTab({novel}: {novel: Novel}) {
