@@ -28,7 +28,6 @@ const libraryTabs = [
 ];
 
 function Shell() {
-  // @ts-ignore
   const { novels, fetchNovels } = useNovelStore();
   const {currentTab, onTabChange} = useTabHandler(libraryTabItems.DEFAULT, libraryTabs);
 

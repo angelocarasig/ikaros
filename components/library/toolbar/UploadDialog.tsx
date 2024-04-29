@@ -2,7 +2,7 @@
 
 import ePub from 'epubjs';
 import { Loader2, Upload } from 'lucide-react';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';

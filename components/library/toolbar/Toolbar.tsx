@@ -11,18 +11,11 @@ import { Dialog, DialogContent, DialogTrigger } from '../../ui/dialog';
 
 import FilterDialog from './FilterDialog';
 import SortDialog from './SortDialog';
+import UploadDialog from './UploadDialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { SortDirection } from '@/models/library-settings';
 
-import dynamic from "next/dynamic";
-// FileList not defined so will dynamically load without SSR
-const UploadDialog = dynamic(
-  () => import("./UploadDialog"),
-  {
-    ssr: false,
-  }
-);
 function Toolbar() {
 	const librarySettings = useLibrarySettingsStore((state) => state.settings);
   const getLibrarySettingCount = useLibrarySettingsStore((state) => state.getSettingCount);
