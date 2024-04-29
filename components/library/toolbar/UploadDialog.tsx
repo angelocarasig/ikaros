@@ -16,13 +16,13 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { alphaNumericSortObjects, sanitizeFilename, zip } from '@/lib/utils';
 import { NovelMetadata } from '@/models/novel-metadata';
-import { useNovelStore } from '@/store/useNovelStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNovels } from '@/store/useNovelStore';
 
 export default function UploadDialog() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { refreshNovels } = useNovelStore();
+  const { refreshNovels } = useNovels();
   const formSchema = z.object({
     files: z.instanceof(FileList).refine((files) => files.length > 0, {
       message: 'At least one file is required.'

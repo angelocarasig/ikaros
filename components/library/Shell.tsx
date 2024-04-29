@@ -35,7 +35,7 @@ function Shell() {
     fetchNovels();
   }, [fetchNovels]);
 
-  const filteredNovels = useLibraryFilters(novels);
+  const { filteredNovels } = useLibraryFilters(novels);
 
   return (
     <div className="min-h-screen w-full">

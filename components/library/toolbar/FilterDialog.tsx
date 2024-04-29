@@ -3,7 +3,6 @@ import { X } from 'lucide-react';
 import { getDateShort, isDateFilterEmpty, toTitleCase } from '@/lib/utils';
 import { DateFilterOption } from '@/models/library-settings';
 import { NovelStatus } from '@/models/novel';
-import useLibrarySettingsStore from '@/store/useLibraryStore';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../ui/accordion';
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';
@@ -11,13 +10,10 @@ import { Input } from '../../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import DateFilterPicker from './DateFilterPicker';
 import Tag from '../../shared/tag';
+import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 export default function FilterDialog() {
-	const librarySettings = useLibrarySettingsStore((state) => state.settings);
-
-	const updateTitle = useLibrarySettingsStore((state) => state.updateTitle);
-	const updateAuthor = useLibrarySettingsStore((state) => state.updateAuthor);
-	const updateDateFilter = useLibrarySettingsStore((state) => state.updateDateFilter);
+	const { librarySettings, updateTitle, updateAuthor, updateDateFilter } = useLibraryFilters();
 
 	return (
 		<>

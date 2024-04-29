@@ -2,8 +2,6 @@
 
 import React, { useEffect } from 'react';
 
-import { useLibrarySettingsStore } from '@/store/useLibraryStore';
-
 import { EllipsisVertical, Filter, SortAsc, SortDesc, Upload } from 'lucide-react';
 
 import { Button } from '../../ui/button';
@@ -15,10 +13,10 @@ import UploadDialog from './UploadDialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { SortDirection } from '@/models/library-settings';
+import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 function Toolbar() {
-	const librarySettings = useLibrarySettingsStore((state) => state.settings);
-  const getLibrarySettingCount = useLibrarySettingsStore((state) => state.getSettingCount);
+	const { librarySettings, getSettingCount } = useLibraryFilters();
 
 	useEffect(() => {
 		console.log("Current Library Settings: ", librarySettings);
@@ -32,7 +30,7 @@ function Toolbar() {
             <Button variant="secondary" className="relative w-[6rem] flex gap-2">
               <Filter className="mr-2 h-4 w-4"/>
               <span>Filter</span>
-              {getLibrarySettingCount() > 0 && (<Badge className="bg-red-500 absolute right-[-10%] -top-1/4 rounded-full select-none pointer-events-none">{getLibrarySettingCount()}</Badge>)}
+              {getSettingCount() > 0 && (<Badge className="bg-red-500 absolute right-[-10%] -top-1/4 rounded-full select-none pointer-events-none">{getSettingCount()}</Badge>)}
             </Button>
           </DialogTrigger>
           <DialogContent>

@@ -26,8 +26,12 @@ import {
 import { Loader2 } from 'lucide-react';
 import { LoginForm, LoginSchema } from '@/schemas/login.schema';
 import { login } from '@/actions/supabase/auth';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+	const router = useRouter();
+	
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -42,8 +46,11 @@ export default function Login() {
 	const onSubmit = async (values: LoginForm) => {
 		setLoading(true);
 		await login(values)
-			.then((res) => setErrorMessage(res))
-			.catch((res) => setErrorMessage(res))
+			.then((res) => {
+				toast.success(res.message);
+				setTimeout(() => router.push('/dashboard'), 1500)
+			})
+			.catch((res) => setErrorMessage(res.message))
 			.finally(() => setLoading(false));
 	};
 

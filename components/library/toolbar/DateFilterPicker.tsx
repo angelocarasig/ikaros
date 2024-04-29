@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, getDate, isDateFilterEmpty } from '@/lib/utils';
 import { DateFilter, DateFilterOption } from '@/models/library-settings';
-import { useLibrarySettingsStore } from '@/store/useLibraryStore';
+import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 enum DateOption {
   BEFORE = 'Before Date',
@@ -31,10 +31,8 @@ const DateFilterPicker = ({dateFilterOption}: { dateFilterOption: DateFilterOpti
     }
   };
 
-  const librarySettings = useLibrarySettingsStore((state) => state.settings);
-  const updateDateFilter = useLibrarySettingsStore((state) => state.updateDateFilter);
+  const { librarySettings, updateDateFilter } = useLibraryFilters();
   const [dateFilter, setDateFilter] = useState(DateOption.BEFORE);
-
   const [selectedDate, setSelectedDate] = useState(getSelectedDateFilterValue());
   const [dateRange, setDateRange] = useState({
     from: undefined,

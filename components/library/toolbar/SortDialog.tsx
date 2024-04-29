@@ -1,14 +1,11 @@
 import { SortDirection, SortOption } from '@/models/library-settings';
-import { useLibrarySettingsStore } from '@/store/useLibraryStore';
 
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 export default function SortDialog() {
-	const librarySettings = useLibrarySettingsStore((state) => state.settings);
-
-	const updateSortOption = useLibrarySettingsStore((state) => state.updateSortOption);
-	const toggleSortDirection = useLibrarySettingsStore((state) => state.toggleSortDirection);
+	const { librarySettings, updateSortOption, toggleSortDirection } = useLibraryFilters();
 
 	return (
 		<>

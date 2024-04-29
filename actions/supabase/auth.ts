@@ -8,29 +8,36 @@ import { LoginForm } from '@/schemas/login.schema';
 import { SignupForm } from '@/schemas/signup.schema';
 
 export async function login(data: LoginForm) {
-	console.log("Signing in user with data: ", data);
+	console.log('Signing in user with data: ', data);
 	const supabase = createClient();
 
 	const { error } = await supabase.auth.signInWithPassword(data);
 
 	console.log('Error Occurred when signing in!', error);
 	if (error) {
-		return error.message;
+		throw {
+			status: error.status,
+			message: error.message
+		};
 	}
 
 	revalidatePath('/', 'layout');
-	redirect('/');
+
+	return {
+		status: 200,
+		message: "Successfully Logged In. Redirecting..."
+	};
 }
 
 export async function signup(data: SignupForm) {
-	console.log("Registering user with data: ", data);
+	console.log('Registering user with data: ', data);
 	const supabase = createClient();
 
 	const signupForm = {
 		email: data.email,
 		password: data.password
-	}
-	
+	};
+
 	const { error } = await supabase.auth.signUp(data);
 
 	if (error) {
@@ -42,13 +49,13 @@ export async function signup(data: SignupForm) {
 }
 
 export async function logout() {
-	console.log("Signing out user: ");
-	
-  const supabase = createClient();
+	console.log('Signing out user: ');
 
-  const { error } = await supabase.auth.signOut();
+	const supabase = createClient();
 
-  if (error) {
+	const { error } = await supabase.auth.signOut();
+
+	if (error) {
 		redirect('/error');
 	}
 

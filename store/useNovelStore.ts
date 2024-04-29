@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { Novel } from '@/models/novel';
 import { getAllNovels } from '@/actions/supabase/novel';
+import { useEffect } from 'react';
+import { useUser } from '@/hooks/useUser';
 
 interface NovelStoreState {
 	novels: Array<Novel>;
@@ -8,7 +10,7 @@ interface NovelStoreState {
 	refreshNovels: () => Promise<void>;
 }
 
-export const useNovelStore = create<NovelStoreState>((set) => ({
+const useNovelStore = create<NovelStoreState>((set) => ({
 	novels: [],
 	fetchNovels: async () => {
 		try {
@@ -27,5 +29,17 @@ export const useNovelStore = create<NovelStoreState>((set) => ({
 		}
 	}
 }));
+
+export const useNovels = () => {
+	const { user } = useUser();
+	const { novels, refreshNovels } = useNovelStore();
+
+	// Anytime the current user changes we should also refresh novels
+	useEffect(() => {
+		refreshNovels();
+	}, [user]);
+
+	return {novels, refreshNovels};
+}
 
 export default useNovelStore;

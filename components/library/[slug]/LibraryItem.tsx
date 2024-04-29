@@ -29,7 +29,7 @@ function LibraryItem({novel}: { novel: Novel }) {
           <div className="absolute bottom-8 left-8 flex items-end gap-4 w-[90%] h-min">
             <div
               id="novelCover"
-              className="rounded aspect-[11/16] h-[14rem] transition ease-in-out z-10 bg-cover bg-center"
+              className="rounded aspect-[11/16] h-[14rem] transition ease-in-out bg-cover bg-center"
               style={{backgroundImage: `url(${novel?.cover_url})`}}
             />
             <div className="flex flex-col self-stretch text-white">
