@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';
 import { Input } from '../../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
-import DateFilterPicker from './DateFilterPicker';
+import DateFilterPicker from './date-filter-picker';
 import Tag from '../../shared/tag';
 import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 

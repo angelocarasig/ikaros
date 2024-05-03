@@ -25,3 +25,9 @@ export const SAMPLE_TAGS = [
 	'Witches',
 	'Yandere'
 ];
+
+export enum BUCKETS {
+	Novels = 'novels',
+	Covers = 'covers',
+	Artwork = 'artwork'
+}

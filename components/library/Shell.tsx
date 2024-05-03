@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import useTabHandler from '@/hooks/useTabHandler';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import { useLibraryFilters } from '@/hooks/useLibraryFilters';
-import useNovelStore from '@/store/useNovelStore';
+import { useNovels } from '@/store/useNovelStore';
 import { Novel } from '@/models/novel';
 import NovelCard from '../shared/novel-card';
 
@@ -27,13 +27,9 @@ const libraryTabs = [
   libraryTabItems.ONESHOTS,
 ];
 
-function Shell() {
-  const { novels, fetchNovels } = useNovelStore();
+function Shell({initialNovels}: {initialNovels: Array<Novel>}) {
+  const { novels } = useNovels(initialNovels);
   const {currentTab, onTabChange} = useTabHandler(libraryTabItems.DEFAULT, libraryTabs);
-
-  useEffect(() => {
-    fetchNovels();
-  }, [fetchNovels]);
 
   const { filteredNovels } = useLibraryFilters(novels);
 

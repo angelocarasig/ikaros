@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Toolbar from '@/components/library/toolbar/Toolbar'
+import Toolbar from '@/components/library/toolbar/toolbar'
 import { Skeleton } from '@/components/ui/skeleton'
 
 function LibrarySkeleton() {
@@ -15,9 +15,6 @@ function LibrarySkeleton() {
           </div>
         </div>
       </div>
-
-
-
     </div>
   )
 }

@@ -17,7 +17,7 @@ function DashboardHeader({ currentNovel }: { currentNovel: Novel }) {
 			<div
 				id="background"
 				className="absolute w-full h-full object-cover select-none bg-cover bg-center blur-[2px] brightness-50"
-				style={{ backgroundImage: `url(${currentNovel.cover_url})` }}
+				style={{ backgroundImage: `url('${currentNovel.cover_url}')` }}
 			/>
 			<div
 				id="backgroundFilter"
@@ -26,7 +26,7 @@ function DashboardHeader({ currentNovel }: { currentNovel: Novel }) {
 					<div
 						id="novelCover"
 						className="rounded aspect-[11/16] h-[12rem] md:h-[18rem] lg:h-[20rem] transition ease-in-out z-10 bg-cover bg-center"
-						style={{ backgroundImage: `url(${currentNovel.cover_url})` }}
+						style={{ backgroundImage: `url('${currentNovel.cover_url}')` }}
 					/>
 					<div className="flex flex-col self-stretch md:p-4 text-white">
 						<h1 className="text-2xl font-bold lg:text-4xl md:text-3xl line-clamp-2 md:line-clamp-3 lg:line-clamp-4">

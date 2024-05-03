@@ -8,8 +8,8 @@ import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 import { type CarouselApi } from '@/components/ui/carousel';
 import { Novel } from '@/models/novel';
 
-import DashboardHeader from './DashboardHeader';
-import DashboardItemRow from '@/components/dashboard/DashboardItemRow';
+import DashboardHeader from './dashboard-header';
+import DashboardItemRow from '@/components/dashboard/dashboard-item row';
 
 export default function DashboardContent({novels, carouselNovels, randomNovels}: { novels: Array<Novel>, carouselNovels: Array<Novel>, randomNovels: Array<Novel> }) {
   // Carousel handler

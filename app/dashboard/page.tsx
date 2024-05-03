@@ -3,8 +3,8 @@ import React from 'react'
 import { getAllNovels } from '@/actions/supabase/novel';
 import { getRandomItemsFromArray } from '@/lib/utils';
 
-import DashboardContent from '@/components/dashboard/DashboardContent';
-import EmptyDashboard from '@/components/dashboard/EmptyDashboard';
+import DashboardContent from '@/components/dashboard/dashboard-content';
+import EmptyDashboard from '@/components/dashboard/empty-dashboard';
 
 async function Dashboard() {
   const novels = await getAllNovels();

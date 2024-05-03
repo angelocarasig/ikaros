@@ -2,14 +2,14 @@
 
 import React, { useEffect } from 'react';
 
-import { EllipsisVertical, Filter, SortAsc, SortDesc, Upload } from 'lucide-react';
+import { EllipsisVertical, Filter, SortAsc, SortDesc } from 'lucide-react';
 
 import { Button } from '../../ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '../../ui/dialog';
 
-import FilterDialog from './FilterDialog';
-import SortDialog from './SortDialog';
-import UploadDialog from './UploadDialog';
+import FilterDialog from './filter-dialog';
+import SortDialog from './sort-dialog';
+import UploadDialog from './upload-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { SortDirection } from '@/models/library-settings';
@@ -24,7 +24,7 @@ function Toolbar() {
 
 	return (
 		<div className="flex flex-wrap w-full h-full gap-2 justify-between p-4 pb-0">
-			<div id="left-side" className="flex gap-2">
+			<div id="left-side" className="flex flex-wrap gap-2">
 				<Dialog>
 					<DialogTrigger asChild>
             <Button variant="secondary" className="relative w-[6rem] flex gap-2">

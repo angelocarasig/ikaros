@@ -91,3 +91,11 @@ export function alphaNumericSortObjects<T>(arr: T[], sortBy: keyof T): T[] {
 		return alphaA!.localeCompare(alphaB!) || Number(numA) - Number(numB);
 	});
 }
+
+export const nameWithoutExtension = (x: string) => {
+	return x.replace(/\.[^/.]+$/, "");
+}
+
+export const getFileUrl = (filename: string) => {
+	return `${process.env.NEXT_PUBLIC_SUPABASE_URL!}/storage/v1/object/public/${filename}`;
+}
