@@ -97,5 +97,10 @@ export const nameWithoutExtension = (x: string) => {
 }
 
 export const getFileUrl = (filename: string) => {
+	// In case when file URL is null or undefined just return it let smth else handle it
+	if (filename == null) {
+		return filename;
+	}
+
 	return `${process.env.NEXT_PUBLIC_SUPABASE_URL!}/storage/v1/object/public/${filename}`;
 }

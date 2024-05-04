@@ -1,7 +1,7 @@
 'use client';
 
 import ePub from 'epubjs';
-import { Database, Loader2, Upload } from 'lucide-react';
+import { Loader2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -16,9 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNovels } from '@/store/useNovelStore';
 import { EpubUploadHandler } from '@/lib/upload-novel';
 import { createClient } from '@/lib/supabase/client';
-import { NovelMetadata } from '@/models/novel-metadata';
 import { useUser } from '@/hooks/useUser';
-import { getFileUrl, nameWithoutExtension } from '@/lib/utils';
+import { getFileUrl, nameWithoutExtension, sanitizeFilename } from '@/lib/utils';
 import { BUCKETS } from '@/constants';
 import { Novel } from '@/models/novel';
 
@@ -87,6 +86,10 @@ export default function UploadDialog() {
   }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (data.files.length  > 10) {
+      toast.error("Only up to 10 files can be submitted at a time. Please try again.");
+      return;
+    }
     setLoading(true);
     const fileReaders = [];
 
@@ -108,11 +111,11 @@ export default function UploadDialog() {
               console.log("Cover! ", cover);
               console.log("Artwork! ", artwork);
 
-              const basePath = `${user!.id}/${nameWithoutExtension(currentNovelFile.name)}`;
+              const basePath = `${user!.id}/${nameWithoutExtension(sanitizeFilename(currentNovelFile.name))}`;
 
               const [novelUploadResult, coverUploadResult, artworkUploadResult] = await Promise.all([
-                uploadFile(currentNovelFile, BUCKETS.Novels, `${basePath}/${currentNovelFile.name}`),
-                uploadFile(cover, BUCKETS.Covers, `${basePath}/${cover.name}`),
+                uploadFile(currentNovelFile, BUCKETS.Novels, `${basePath}/${sanitizeFilename(currentNovelFile.name)}`),
+                cover != null && uploadFile(cover, BUCKETS.Covers, `${basePath}/${cover.name}`),
                 uploadMultiple(artwork, BUCKETS.Artwork, basePath)
               ]);
 
@@ -149,7 +152,8 @@ export default function UploadDialog() {
       fileReaders.push(fileReaderPromise);
     }
 
-    // Remove modal, when fully uploaded refresh library
+    // Remove modal
+    // When fully uploaded, refresh library
     setOpen(false);
     Promise.all(fileReaders).finally(() => {
       refreshNovels();
@@ -169,7 +173,7 @@ export default function UploadDialog() {
         <DialogHeader>
           <DialogTitle>Upload Novels</DialogTitle>
           <DialogDescription>
-            Import a novel. Only .epub format is accepted.
+            Import a novel. Only .epub format is accepted. Can upload up to 10 files at once.
           </DialogDescription>
         </DialogHeader>
 

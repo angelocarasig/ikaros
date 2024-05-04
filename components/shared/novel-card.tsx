@@ -7,6 +7,7 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Novel } from '@/models/novel';
+import { Skeleton } from '../ui/skeleton';
 
 function NovelCard({ novel, imageProps, captionProps }: { novel: Novel, imageProps?: string, captionProps?: string }) {
 	const router = useRouter();
@@ -21,7 +22,8 @@ function NovelCard({ novel, imageProps, captionProps }: { novel: Novel, imagePro
 			transition={{ duration: 0.5, ease: [0.175, 0.885, 0.32, 1.275] }}
 		>
 			<>
-				<Image
+				{novel.cover_url != null ? (
+					<Image
 					src={novel.cover_url}
 					alt="novel cover"
 					className={cn(
@@ -38,6 +40,16 @@ function NovelCard({ novel, imageProps, captionProps }: { novel: Novel, imagePro
 					onClick={() => router.push(`/library/${novel.id}`)}
 					priority
 				/>
+				) : (
+					<Skeleton 
+					onClick={() => router.push(`/library/${novel.id}`)}
+					className={cn(
+						"aspect-[11/16] w-min object-cover rounded cursor-pointer flex items-center justify-center text-center",
+						imageProps
+					)}>
+						<p>No Cover Available.</p>
+					</Skeleton>
+				)}
 			</>
 			<figcaption
 				className={cn("pt-2 text-xs text-muted-foreground flex flex-col", captionProps)}>

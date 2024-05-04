@@ -25,11 +25,27 @@ export class EpubUploadHandler {
 		return result;
 	}
 
-	public async getNovelCover(): Promise<File> {
-		const coverUrl = await this.novel.coverUrl();
+	public async getNovelCover(): Promise<File | null> {
+		const coverUrl = await this.novel.coverUrl() ?? await this.getReplacementCover();
+		if (coverUrl == null) {
+			return null;
+		}
+
 		const response = await fetch(coverUrl!);
 		const coverBlob = await response.blob();
     return new File([coverBlob], `cover.png`, { type: 'image/png' });
+	}
+
+	public async getReplacementCover(): Promise<string | null> {
+		const resources = await this.novel.loaded.resources as any;
+		const assets: Array<Asset> = resources.assets;
+
+    const replacementUrls = await this.novel.resources.replacements();
+		const artworkUrls: Array<string> = zip(assets, replacementUrls)
+			.filter((value: Array<Asset>) => value[0].type.toLowerCase().includes('image') && value[0].href.toLowerCase().includes('cover'))
+			.map(value => value[1]);
+
+		return artworkUrls[0] ?? null;
 	}
 
   public async getNovelArtwork(): Promise<Array<File>> {

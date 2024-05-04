@@ -92,7 +92,7 @@ export default function Navbar() {
 		const novelHref = novel == null ? '/' : `/library/${novel.id}`;
 		return (
 			<NavigationMenuLink className='relative'>
-				{novel != null ? (
+				{novel != null && novel.cover_url != null ? (
 					<Image
 						src={novel.cover_url}
 						alt="novel cover"
@@ -107,9 +107,9 @@ export default function Navbar() {
 						onClick={() => router.push(novelHref)}
 					/>
 				) : (
-					<Skeleton className='aspect-[11/16] w-full h-full' />
+					<Skeleton className='aspect-[11/16] w-full h-full p-2 cursor-pointer' onClick={() => router.push(novelHref)}/>
 				)}
-				<div className="pointer-events-none absolute bottom-0 left-2 mb-2 mt-2 text-lg font-normal">
+				<div className="pointer-events-none absolute bottom-0 left-2 mb-2 mt-2 text-lg font-normal w-auto">
 					{novel != null ? (
 						<>Continue Reading</>
 					) : (
@@ -151,8 +151,8 @@ export default function Navbar() {
 					<NavigationMenuItem>
 						<NavigationMenuTrigger>Library</NavigationMenuTrigger>
 						<NavigationMenuContent>
-							<ul className="grid p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-								<li className="row-span-3 mr-4">
+							<ul className="grid gap-2 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+								<li className="row-span-3">
 									<RecentNovelSection novel={novels.length > 0 ? novels.reduce((prev, curr) => new Date(prev.created_at) > new Date(curr.created_at) ? prev : curr) : null} />
 								</li>
 								<ListItem href="/library" title="All">
