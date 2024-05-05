@@ -3,18 +3,31 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { Menu, Settings, Palette, Search, List, Bookmark, Play, Columns2, ChevronsUpDown, Square, X, Home, ArrowLeft, ArrowRight } from 'lucide-react';
+import {
+	Menu,
+	Settings,
+	Palette,
+	Search,
+	List,
+	Bookmark,
+	Play,
+	Columns2,
+	ChevronsUpDown,
+	Square,
+	X,
+	Home,
+	ArrowLeft,
+	ArrowRight
+} from 'lucide-react';
 
 import { Button } from '../ui/button';
 
 import useOutsideClick from '@/hooks/useOutsideClick';
 import ThemeSwitch from '../shared/theme-switch';
-import { NavItem } from 'epubjs';
 
 import {
 	Sheet,
 	SheetContent,
-	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
@@ -22,7 +35,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { Novel } from '@/models/novel/novel';
 import { ScrollArea } from '../ui/scroll-area';
-import { IconLeft } from 'react-day-picker';
+import useReaderStore from '@/store/useReaderStore';
 
 
 const containerVariants = {
@@ -51,15 +64,8 @@ const itemVariants = {
 	}
 };
 
-interface MenuProps {
-	novel: Novel;
-	toc: Array<NavItem>;
-	prevSection: () => void;
-	nextSection: () => void;
-	itemClicked: (href: string) => void;
-}
-
-function ReaderMenu({ novel, toc, itemClicked, prevSection, nextSection }: MenuProps) {
+function ReaderMenu({ novel }: { novel: Novel }) {
+	const { tableOfContents, prevSection, nextSection, jumpToSection } = useReaderStore();
 	const [showMenu, setShowMenu] = useState(false);
 	const menuRef = useRef(null);
 	const router = useRouter();
@@ -128,12 +134,15 @@ function ReaderMenu({ novel, toc, itemClicked, prevSection, nextSection }: MenuP
 										<SheetTitle>Table Of Contents</SheetTitle>
 										<ScrollArea type='always' className='w-full h-[90vh] p-4'>
 											<div className='flex flex-col gap-2'>
-												{toc.map(value => (
+												{tableOfContents.map(value => (
 													<Button
 														key={value.href}
 														variant="secondary"
 														className='pt-2 pb-3 h-auto text-wrap'
-														onClick={() => itemClicked(value.href)}
+														onClick={() => {
+															console.log(value);
+															jumpToSection(value.href);
+														}}
 													>
 														{value.label}
 													</Button>

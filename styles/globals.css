@@ -24,6 +24,11 @@
 	background: transparent;
 }
 
+div.epub-view iframe html {
+	border-left: 1px solid var(--muted) !important;
+	border-right: 1px solid var(--muted) !important;
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
