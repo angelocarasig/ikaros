@@ -6,7 +6,7 @@ import {
 	LibrarySettings,
 	SortDirection,
 	SortOption
-} from '@/models/library-settings';
+} from '@/models/library/library-settings';
 
 const defaultSettings: LibrarySettings = {
 	title: '',

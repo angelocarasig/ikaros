@@ -1,6 +1,6 @@
 import React from 'react';
 import { getDate, toTitleCase } from '@/lib/utils';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 function OverviewTab({ novel }: { novel: Novel }) {
 	return (

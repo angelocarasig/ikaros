@@ -19,7 +19,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useUser } from '@/hooks/useUser';
 import { getFileUrl, nameWithoutExtension, sanitizeFilename } from '@/lib/utils';
 import { BUCKETS } from '@/constants';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 export default function UploadDialog() {
   const { user } = useUser();

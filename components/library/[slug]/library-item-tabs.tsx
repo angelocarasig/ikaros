@@ -9,7 +9,7 @@ import BookmarksTab from './bookmarks-tab';
 import OverviewTab from './overview-tab';
 import useTabHandler from '@/hooks/useTabHandler';
 
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 enum libraryTabItems {
 	OVERVIEW = 'Overview',

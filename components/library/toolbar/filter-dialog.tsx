@@ -1,8 +1,8 @@
 import { X } from 'lucide-react';
 
 import { getDateShort, isDateFilterEmpty, toTitleCase } from '@/lib/utils';
-import { DateFilterOption } from '@/models/library-settings';
-import { NovelStatus } from '@/models/novel';
+import { DateFilterOption } from '@/models/library/library-settings';
+import { NovelStatus } from '@/models/novel/novel';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../ui/accordion';
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';

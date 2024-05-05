@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { logout } from '@/actions/supabase/auth';
 
 import { cn } from '@/lib/utils';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 import { useNovels } from '@/store/useNovelStore';
 import { useUser } from '@/hooks/useUser';
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import NovelCard from '../shared/novel-card';

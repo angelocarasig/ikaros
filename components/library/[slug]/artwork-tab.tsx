@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 import ePub from 'epubjs';
 import { alphaNumericSortObjects, zip } from '@/lib/utils';
 import { LoaderCircle } from 'lucide-react';

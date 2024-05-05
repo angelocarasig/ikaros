@@ -1,12 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import { motion } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 import { Skeleton } from '../ui/skeleton';
 
 function NovelCard({ novel, imageProps, captionProps }: { novel: Novel, imageProps?: string, captionProps?: string }) {

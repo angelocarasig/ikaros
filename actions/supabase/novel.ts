@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 export async function uploadNovel() {
 	throw "Function needs to be called on client to deal with server payload size restrictions.";

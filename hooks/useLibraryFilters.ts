@@ -6,8 +6,8 @@ import {
 	LibrarySettings,
 	SortDirection,
 	SortOption
-} from '@/models/library-settings';
-import { Novel } from '@/models/novel';
+} from '@/models/library/library-settings';
+import { Novel } from '@/models/novel/novel';
 import { useLibrarySettingsStore } from '@/store/useLibrarySettingsStore';
 
 function filterAndSort(novels: Array<Novel>, settings: LibrarySettings): Array<Novel> {

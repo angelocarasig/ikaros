@@ -1,4 +1,4 @@
-import { SortDirection, SortOption } from '@/models/library-settings';
+import { SortDirection, SortOption } from '@/models/library/library-settings';
 
 import { DialogDescription, DialogHeader, DialogTitle } from '../../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';

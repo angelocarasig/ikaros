@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { BookOpen, Library } from 'lucide-react';
 
 import { Button } from '../ui/button';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 
 function DashboardHeader({ currentNovel }: { currentNovel: Novel }) {

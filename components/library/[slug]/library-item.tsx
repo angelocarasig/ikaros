@@ -3,7 +3,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 import { BookOpen } from 'lucide-react';
 import { Button } from '../../ui/button';

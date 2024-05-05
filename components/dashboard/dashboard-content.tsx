@@ -6,7 +6,7 @@ import Autoplay from 'embla-carousel-autoplay';
 
 import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 import { type CarouselApi } from '@/components/ui/carousel';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 
 import DashboardHeader from './dashboard-header';
 import DashboardItemRow from '@/components/dashboard/dashboard-item row';

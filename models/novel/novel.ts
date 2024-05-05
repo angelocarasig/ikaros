@@ -1,7 +1,7 @@
-import { NovelMetadata } from "./novel-metadata";
+import { NovelMetadata } from "./metadata";
 
 export interface Novel extends NovelMetadata {
-	id: number;
+	id: string;
 	owner_id: string;
 	file_url: string;
 	cover_url?: string;

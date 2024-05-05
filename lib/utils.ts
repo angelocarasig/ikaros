@@ -1,5 +1,5 @@
 // Utility functions
-import { DateFilter } from '@/models/library-settings';
+import { DateFilter } from '@/models/library/library-settings';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

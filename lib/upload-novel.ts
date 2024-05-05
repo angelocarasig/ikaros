@@ -1,5 +1,5 @@
-import { Asset } from '@/models/asset';
-import { NovelMetadata } from '@/models/novel-metadata';
+import { Asset } from '@/models/novel/asset';
+import { NovelMetadata } from '@/models/novel/metadata';
 import { Book } from 'epubjs';
 import { zip } from './utils';
 

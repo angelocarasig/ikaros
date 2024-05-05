@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 import { useNovels } from '@/store/useNovelStore';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 import NovelCard from '../shared/novel-card';
 
 enum libraryTabItems {

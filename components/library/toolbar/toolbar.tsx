@@ -12,7 +12,7 @@ import SortDialog from './sort-dialog';
 import UploadDialog from './upload-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Badge } from '@/components/ui/badge';
-import { SortDirection } from '@/models/library-settings';
+import { SortDirection } from '@/models/library/library-settings';
 import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 function Toolbar() {

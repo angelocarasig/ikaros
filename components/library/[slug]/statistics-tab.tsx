@@ -4,7 +4,7 @@ import React from 'react'
 import { Progress } from '../../ui/progress';
 import { getDate } from '@/lib/utils';
 import { SAMPLE_TAGS } from '@/constants';
-import { Novel, NovelStatus } from '@/models/novel';
+import { Novel, NovelStatus } from '@/models/novel/novel';
 
 function StatisticsTab({ novel }: { novel: Novel }) {
   const [progress, setProgress] = React.useState(0)

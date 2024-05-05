@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Novel } from '@/models/novel';
+import { Novel } from '@/models/novel/novel';
 import { getAllNovels } from '@/actions/supabase/novel';
 import { useEffect } from 'react';
 import { useUser } from '@/hooks/useUser';
