@@ -9,6 +9,7 @@ export const defaultReaderTheme: ReaderTheme = {
   content: {
     '*': {
       'margin': '0 auto',
+      'text-indent': '0 !important',
       'line-height': '1.75rem !important',
       'box-sizing': 'border-box !important',
       'font-family': 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important',
