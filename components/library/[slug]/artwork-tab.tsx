@@ -1,11 +1,8 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { Novel } from '@/models/novel/novel';
-import ePub from 'epubjs';
-import { alphaNumericSortObjects, zip } from '@/lib/utils';
-import { LoaderCircle } from 'lucide-react';
 
 function ArtworkTab({ novel }: { novel: Novel }) {
   /**

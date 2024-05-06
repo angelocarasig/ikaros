@@ -6,7 +6,7 @@ export interface Novel extends NovelMetadata {
 	file_url: string;
 	cover_url?: string;
 
-	artwork: Array<string>;
+	artwork: Array<string>; // Array of URLs
 	metadata: Metadata;
 }
 

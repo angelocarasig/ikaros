@@ -9,15 +9,15 @@ export const defaultReaderTheme: ReaderTheme = {
   content: {
     '*': {
       'margin': '0 auto',
-      'line-height': '1.75rem',
-      'box-sizing': 'border-box',
+      'line-height': '1.75rem !important',
+      'box-sizing': 'border-box !important',
       'font-family': 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important',
     },
     'body': {
       'padding': '2rem !important',
     },
     'a': {
-      'color': '#80c8ff',
+      'color': '#80c8ff !important',
     },
     'img': {
       'border-radius': '4px',

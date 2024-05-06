@@ -22,10 +22,12 @@ export const getDate = (date: any) => {
 };
 
 // Convert a date into dd/mm/yyyy format
-export const getDateShort = (date: any) =>
-	`${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
+export const getDateShort = (input: any) => {
+	const date = new Date(input);
+	return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
 		.toString()
 		.padStart(2, '0')}/${date.getFullYear()}`;
+}
 
 // Convert a string to title case
 export const toTitleCase = (str: string) =>
@@ -103,4 +105,12 @@ export const getFileUrl = (filename: string) => {
 	}
 
 	return `${process.env.NEXT_PUBLIC_SUPABASE_URL!}/storage/v1/object/public/${filename}`;
+}
+
+export const toPercentage = (value: number | undefined) => {
+	if (value == null) {
+		return "Unknown";
+	}
+
+	return (value * 100).toFixed(2);
 }

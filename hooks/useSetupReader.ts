@@ -8,10 +8,12 @@ import { ToCItem } from '@/models/reader/toc-item';
 import { defaultReaderTheme } from '@/models/reader/reader-themes';
 import { defaultScrollSettings } from '@/models/reader/reader-settings';
 import useReaderStore from '@/store/useReaderStore';
+import useBookmarkStore from '@/store/useBookmarksStore';
 
 export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HTMLElement>) {
 	const { resolvedTheme } = useTheme();
-	const { book, rendition, setBook, setRendition, setCurrentLocation, setTableOfContents } = useReaderStore();
+	const { book, rendition, setBook, setRendition, setLocations, setCurrentLocation, setTableOfContents } = useReaderStore();
+	const { bookmarks, loading } = useBookmarkStore();
 
 	/**
 	 * NOTE: To make this file easier to read, collapse setupRendition and setupTableOfContents
@@ -31,10 +33,13 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 				setBook(currentBook);
 
 				await currentBook.ready;
-				if (!isActive) return;
+				if (!isActive || loading) return;
 
 				// Init
 				const createdRendition = currentBook.renderTo(readerRef.current, defaultScrollSettings);
+				const locations = await currentBook.locations.generate(1000); // Maybe good to use localstorage here
+				console.log("Locations: ", locations);
+				setLocations(locations);
 
 				// Apply themes
 				createdRendition.themes.register(defaultReaderTheme.key, defaultReaderTheme.content);
@@ -42,14 +47,24 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 
 				// Handle current location
 				createdRendition.on('relocated', (location: Location) => {
-					console.table(location);
 					console.log(createdRendition.settings);
 					setCurrentLocation(location);
-					console.log('Updated Current Location');
+					console.log("Current Location: ", location);
+					
 				});
 
 				// Display
-				createdRendition.display();
+				if (bookmarks.length > 0) {
+					const mostRecentBookmark = bookmarks.reduce((latest, current) => {
+						return latest.timestamp > current.timestamp ? latest : current;
+					});
+	
+					createdRendition.display(mostRecentBookmark.epubcfi);
+				}
+				else {
+					createdRendition.display();
+				}
+
 				setRendition(createdRendition);
 
 				return () => createdRendition.destroy();
@@ -89,9 +104,13 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 			isActive = false;
 		};
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [book, readerRef]); // If book or the ref changes retrigger rendition
+	}, [book, readerRef, loading]); // If book or the ref changes retrigger rendition
 
-	const updateRenditionTheme = () => {
+	// Handle themes
+	useEffect(() => {
+		if (rendition == null) return;
+
+		console.log(`Updating rendition theme to ${resolvedTheme})`);
 		switch (resolvedTheme) {
 			case 'dark': {
 				rendition!.themes.override('color', '#FAFAFA');
@@ -104,11 +123,6 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 				break;
 			}
 		}
-	};
-
-	useEffect(() => {
-		if (rendition == null) return;
-		console.log('Updating rendition themes... (rendition)');
-		updateRenditionTheme();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rendition, resolvedTheme]);
 }

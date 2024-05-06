@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import {
@@ -17,25 +17,26 @@ import {
 	X,
 	Home,
 	ArrowLeft,
-	ArrowRight
+	ArrowRight,
+	CircleHelp
 } from 'lucide-react';
 
 import { Button } from '../ui/button';
 
-import useOutsideClick from '@/hooks/useOutsideClick';
 import ThemeSwitch from '../shared/theme-switch';
 
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
-	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation';
 import { Novel } from '@/models/novel/novel';
-import { ScrollArea } from '../ui/scroll-area';
 import useReaderStore from '@/store/useReaderStore';
+import { toPercentage } from '@/lib/utils';
+import ReaderMenuSidebar from './reader-menu-sidebar';
+import ReaderMenuBookmark from './reader-menu-bookmark';
 
 
 const containerVariants = {
@@ -65,22 +66,18 @@ const itemVariants = {
 };
 
 function ReaderMenu({ novel }: { novel: Novel }) {
-	const { tableOfContents, prevSection, nextSection, jumpToSection } = useReaderStore();
+	const { currentLocation, prevSection, nextSection, getPageNumber } = useReaderStore();
 	const [showMenu, setShowMenu] = useState(false);
-	const menuRef = useRef(null);
 	const router = useRouter();
 
 	// TODO: Convert below to custom hook:
 	const [viewMode, setViewMode] = useState('infinite');
 	const [autoplay, setAutoplay] = useState(false);
 
-	useOutsideClick(menuRef, () => setShowMenu(false));
-
-	const chapterProgress = Math.floor(Math.random() * 101);
-
 	return (
 		<div className="fixed bottom-4 right-4 z-10">
 			<div className="p-2 w-full h-full flex items-center justify-center gap-4">
+				<div className='select-none'>{getPageNumber()}</div>
 				{!showMenu && (
 					<>
 						<Button
@@ -111,7 +108,6 @@ function ReaderMenu({ novel }: { novel: Novel }) {
 					{showMenu && (
 						<motion.div
 							className='fixed right-2 bottom-2 select-none'
-							ref={menuRef}
 							initial="hidden"
 							animate="visible"
 							exit="exit"
@@ -119,55 +115,41 @@ function ReaderMenu({ novel }: { novel: Novel }) {
 							<Sheet>
 								<SheetTrigger>
 									<motion.div variants={itemVariants} onClick={() => console.log("Clicked contents")}>
-										<div className="relative w-[15rem] h-[3rem] rounded-xl bg-muted m-4 py-2 px-4 flex items-center justify-between hover:cursor-pointer hover:bg-zinc-700 transition-colors">
-											<div className="absolute top-0 left-0 h-full bg-muted-foreground rounded-xl" style={{ width: `${chapterProgress}%` }} />
+										<div className="relative w-[15rem] h-[3rem] rounded-xl bg-muted m-4 py-2 px-4 flex items-center justify-between hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
+											{/* <div className="absolute top-0 left-0 h-full bg-zinc-200 dark:bg-zinc-500 rounded-xl" style={{ width: `${toPercentage(currentLocation?.end.percentage)}%` }} /> */}
+											<motion.div
+												className="absolute top-0 left-0 h-full bg-zinc-200 dark:bg-zinc-500 rounded-xl"
+												initial={{ width: '0%' }}
+												animate={{ width: `${toPercentage(currentLocation?.end.percentage)}%` }}
+												transition={{ duration: 0.2, ease: [0, 0, 0, 1.01] }}
+											/>
 											<div className="relative z-10 flex justify-between w-full">
 												<span>Contents</span>
-												<span>{chapterProgress}%</span>
+												<span>{toPercentage(currentLocation?.end.percentage)}%</span>
 												<List />
 											</div>
 										</div>
 									</motion.div>
 								</SheetTrigger>
-								<SheetContent>
+								<SheetContent hideX>
 									<SheetHeader>
-										<SheetTitle>Table Of Contents</SheetTitle>
-										<ScrollArea type='always' className='w-full h-[90vh] p-4'>
-											<div className='flex flex-col gap-2'>
-												{tableOfContents.map(value => (
-													<Button
-														key={value.href}
-														variant="secondary"
-														className='pt-2 pb-3 h-auto text-wrap'
-														onClick={() => {
-															console.log(value);
-															jumpToSection(value.href);
-														}}
-													>
-														{value.label}
-													</Button>
-												))}
-											</div>
-										</ScrollArea>
+										<ReaderMenuSidebar novel={novel} />
 									</SheetHeader>
 								</SheetContent>
 							</Sheet>
 
 							<motion.div variants={itemVariants}>
-								<div className="w-[15rem] h-[3rem] rounded-xl bg-muted m-4 mt-0 py-2 px-4 flex items-center justify-between hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+								<div className="w-[15rem] h-[3rem] rounded-xl bg-muted m-4 mt-0 py-2 px-4 flex items-center justify-between hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 									<span>Search</span>
 									<Search />
 								</div>
 							</motion.div>
 							<motion.div variants={itemVariants}>
 								<div className="w-[15rem] h-40 rounded-xl m-4 grid grid-cols-3 grid-rows-3 gap-2 items-center">
-									<div
-										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
-										<Bookmark />
-									</div>
+									<ReaderMenuBookmark currentLocation={currentLocation} novelId={novel.id} />
 									<div
 										onClick={() => setAutoplay(!autoplay)}
-										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										{autoplay ? (
 											<Square />
 										) : (
@@ -176,33 +158,35 @@ function ReaderMenu({ novel }: { novel: Novel }) {
 									</div>
 									<div
 										onClick={() => setViewMode(viewMode === 'infinite' ? 'paginated' : 'infinite')}
-										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										{viewMode === 'infinite' ? (
 											<Columns2 />
 										) : (
 											<ChevronsUpDown />
 										)}
 									</div>
-									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										<Palette />
 									</div>
-									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										<ThemeSwitch />
 									</div>
-									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+									<div className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										<Settings />
 									</div>
-									<div>
+									<div
+										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
+										<CircleHelp />
 									</div>
 									<div
 										onClick={() => router.push(`/library/${novel.id}`)}
-										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										{/* TODO: Add Alert dialog to go back to home */}
 										<Home />
 									</div>
 									<div
 										onClick={() => setShowMenu(false)}
-										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-700 transition-colors">
+										className="bg-muted rounded-xl w-full h-full p-2 flex items-center justify-center hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">
 										<X />
 									</div>
 								</div>

@@ -67,7 +67,7 @@ const defaultSettings: RenditionSettings = {
 	height: '100%',
   view: 'iframe',
 	defaultDirection: 'ltr',
-	stylesheet: '@/styles/globals.css', // TODO: inject stylesheet
+	// stylesheet: '@/styles/globals.css', // TODO: inject stylesheet
   snap: false,
   allowScriptedContent: false,
   resizeOnOrientationChange: true,

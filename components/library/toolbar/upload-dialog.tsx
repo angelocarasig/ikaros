@@ -86,7 +86,7 @@ export default function UploadDialog() {
   }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (data.files.length  > 10) {
+    if (data.files.length > 10) {
       toast.error("Only up to 10 files can be submitted at a time. Please try again.");
       return;
     }
@@ -141,10 +141,10 @@ export default function UploadDialog() {
 
       toast.promise(fileReaderPromise, {
         loading: `Uploading ${currentNovelFile.name}...`,
-        success: (data) => {
+        success: () => {
           return `Finished uploading ${currentNovelFile.name}.`;
         },
-        error: (error) => {
+        error: () => {
           return `Couldn't upload ${currentNovelFile.name}.`;
         }
       })
@@ -162,7 +162,7 @@ export default function UploadDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} >
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-[6rem]">
           <Upload className="mr-2 h-4 w-4" />

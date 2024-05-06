@@ -5,27 +5,32 @@ import { ToCItem } from '@/models/reader/toc-item';
 interface ReaderState {
 	book: Book | null;
 	rendition: Rendition | null;
+	locations: Array<string>;
 	currentLocation: Location | null;
 	tableOfContents: ToCItem[];
 	setBook: (book: Book | null) => void;
 	setRendition: (rendition: Rendition | null) => void;
+	setLocations: (locations: Array<string>) => void;
 	setCurrentLocation: (location: Location | null) => void;
 	setTableOfContents: (toc: ToCItem[]) => void;
 	jumpToSection: (href: string) => void;
 	nextSection: () => void;
 	prevSection: () => void;
+	getPageNumber: () => string;
 }
 
 const useReaderStore = create<ReaderState>((set, get) => ({
 	book: null,
 	rendition: null,
+	locations: [],
 	currentLocation: null,
 	tableOfContents: [],
 
-	setBook: (book) => set({ book }),
-	setRendition: (rendition) => set({ rendition }),
-	setCurrentLocation: (location) => set({ currentLocation: location }),
-	setTableOfContents: (toc) => set({ tableOfContents: toc }),
+	setBook: (book: Book | null) => set({ book }),
+	setRendition: (rendition: Rendition | null) => set({ rendition }),
+	setLocations: (locations: Array<string>) => set({ locations }),
+	setCurrentLocation: (location: Location | null) => set({ currentLocation: location }),
+	setTableOfContents: (toc: Array<ToCItem>) => set({ tableOfContents: toc }),
 
 	jumpToSection: (href: string) => {
 		const { rendition } = get();
@@ -52,6 +57,15 @@ const useReaderStore = create<ReaderState>((set, get) => ({
 		if (location) {
 			rendition.display(location.href);
 		}
+	},
+
+	getPageNumber: () => {
+		const { currentLocation, locations } = get();
+		if (locations.length <= 0 || currentLocation == null) {
+			return "0/0";
+		}
+
+		return `${currentLocation.end.location}/${locations.length}`;
 	}
 }));
 
