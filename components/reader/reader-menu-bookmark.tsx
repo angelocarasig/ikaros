@@ -25,8 +25,6 @@ import { useUser } from '@/hooks/useUser';
 import { Location } from 'epubjs';
 import { toast } from 'sonner';
 import useBookmarkStore from '@/store/useBookmarksStore';
-import useReaderStore from '@/store/useReaderStore';
-
 
 function ReaderMenuBookmark({ currentLocation, novelId }: { currentLocation: Location | null, novelId: string }) {
   const { user } = useUser();

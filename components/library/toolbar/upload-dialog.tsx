@@ -1,25 +1,41 @@
 'use client';
 
-import ePub from 'epubjs';
-import { Loader2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+
+import ePub from 'epubjs';
+import { Loader2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { 
+  Form, 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormMessage
+ } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNovels } from '@/store/useNovelStore';
+
 import { EpubUploadHandler } from '@/lib/upload-novel';
 import { createClient } from '@/lib/supabase/client';
+
+import { Novel } from '@/models/novel/novel';
+
 import { useUser } from '@/hooks/useUser';
+import { useNovels } from '@/store/useNovelStore';
+
 import { getFileUrl, nameWithoutExtension, sanitizeFilename } from '@/lib/utils';
 import { BUCKETS } from '@/constants';
-import { Novel } from '@/models/novel/novel';
 
 export default function UploadDialog() {
   const { user } = useUser();

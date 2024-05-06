@@ -36,7 +36,7 @@ export default function DashboardContent({novels, carouselNovels, randomNovels}:
           </CarouselContent>
         </Carousel>
         <div className="relative w-full flex justify-center h-[0.35rem] px-8">
-          <div className="absolute top-2 sm:-top-12 right-2">{current + 1} / {carouselNovels.length}</div>
+          <div className="absolute top-2 sm:-top-12 right-2 select-none">{current + 1} / {carouselNovels.length}</div>
           <div className="absolute -top-2 flex gap-1 w-[90%] h-full">
             {carouselNovels.map((_, index) => (
               <div
@@ -53,7 +53,7 @@ export default function DashboardContent({novels, carouselNovels, randomNovels}:
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
           .slice(0, 20)
         }/>
-        <DashboardItemRow itemTitle="Random" novels={randomNovels}/>
+        <DashboardItemRow itemTitle="Random" novels={randomNovels.slice(0, 20)}/>
       </div>
     </>
   );

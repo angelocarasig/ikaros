@@ -1,7 +1,3 @@
-'use client'
-
-import React from 'react';
-
 import { useRouter } from 'next/navigation';
 import { BookOpen, Library } from 'lucide-react';
 

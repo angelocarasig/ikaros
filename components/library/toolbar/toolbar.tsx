@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useEffect } from 'react';
-
+import { useEffect } from 'react';
 import { EllipsisVertical, Filter, SortAsc, SortDesc } from 'lucide-react';
 
 import { Button } from '../../ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '../../ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 
 import FilterDialog from './filter-dialog';
 import SortDialog from './sort-dialog';
 import UploadDialog from './upload-dialog';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+
+import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 import { Badge } from '@/components/ui/badge';
 import { SortDirection } from '@/models/library/library-settings';
-import { useLibraryFilters } from '@/hooks/useLibraryFilters';
 
 function Toolbar() {
 	const { librarySettings, getSettingCount } = useLibraryFilters();
@@ -54,8 +54,8 @@ function Toolbar() {
 					</DialogContent>
 				</Dialog>
 
-				{/* TODO: Ellipsis */}
-				<Popover>
+				{/* TODO: Ellipsis idk what to put here tbh */}
+				{/* <Popover>
 					<PopoverTrigger asChild>
 						<Button variant="secondary" className="" size="icon">
 							<EllipsisVertical />
@@ -65,7 +65,7 @@ function Toolbar() {
 						<div className="grid gap-4">
 						</div>
 					</PopoverContent>
-				</Popover>
+				</Popover> */}
 			</div>
 
 			<div id="right-side">

@@ -1,10 +1,12 @@
 'use client';
 
-import { Progress } from '@/components/ui/progress';
-import { getDate, toPercentage } from '@/lib/utils';
-import { Novel } from '@/models/novel/novel'
+import { useEffect } from 'react'
+
 import useBookmarkStore from '@/store/useBookmarksStore'
-import React, { useEffect } from 'react'
+import { Progress } from '@/components/ui/progress';
+
+import { toPercentage } from '@/lib/utils';
+import { Novel } from '@/models/novel/novel'
 
 function BookmarksTab({ novel }: { novel: Novel }) {
   const { bookmarks, loading, fetchBookmarks } = useBookmarkStore();

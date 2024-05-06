@@ -1,15 +1,13 @@
-'use client';
-
-import React from 'react';
-
+import dynamic from 'next/dynamic';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
 
-import ArtworkTab from './artwork-tab';
-import BookmarksTab from './bookmarks-tab';
-import OverviewTab from './overview-tab';
 import useTabHandler from '@/hooks/useTabHandler';
 
 import { Novel } from '@/models/novel/novel';
+
+const OverviewTab = dynamic(() => import('./overview-tab'));
+const BookmarksTab = dynamic(() => import('./bookmarks-tab'));
+const ArtworkTab = dynamic(() => import('./artwork-tab'));
 
 enum libraryTabItems {
 	OVERVIEW = 'Overview',
@@ -30,7 +28,7 @@ function LibraryItemTabs({ novel }: { novel: Novel }) {
 				<TabsTrigger value={libraryTabItems.ARTWORK}>{libraryTabItems.ARTWORK}</TabsTrigger>
 			</TabsList>
 
-			{/* Lazy load so that artwork does not cause giga slowdown */}
+			{/* Lazy load so that artwork tab does not cause giga slowdown */}
 			<TabsContent value={libraryTabItems.OVERVIEW}>
 				{currentTab === libraryTabItems.OVERVIEW && <OverviewTab novel={novel} />}
 			</TabsContent>

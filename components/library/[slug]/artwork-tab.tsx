@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import Image from 'next/image'
 import { Novel } from '@/models/novel/novel';
@@ -19,7 +17,7 @@ function ArtworkTab({ novel }: { novel: Novel }) {
           alt='artwork'
           width="500"
           height="500"
-          className="data-[loaded=false]:animate-pulse data-[loaded=false]:bg-gray-100/10"
+          className="rounded data-[loaded=false]:animate-pulse data-[loaded=false]:bg-gray-100/10"
           src={`${image}`}
           loading="eager"
           data-loaded="false"

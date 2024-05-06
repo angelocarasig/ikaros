@@ -1,12 +1,38 @@
-import React from 'react';
+'use client'
 
-import LibraryItem from '@/components/library/[slug]/library-item';
+import { useState, useEffect } from 'react';
+
 import { getNovel } from '@/actions/supabase/novel';
+import LibraryItem from '@/components/library/[slug]/library-item';
+import { Novel } from '@/models/novel/novel';
+import LibraryItemSkeleton from './loading';
 
-export default async function Page({ params }: { params: { slug: string } }) {
-	const novel = await getNovel(params.slug);
-	
-	return (
-		<LibraryItem novel={novel}/>
-	)
-}
+const Page = ({ params }: { params: { slug: string } }) => {
+  const [novel, setNovel] = useState<Novel | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNovel = async () => {
+      try {
+        const fetchedNovel = await getNovel(params.slug);
+        setNovel(fetchedNovel);
+      } 
+			catch (error) {
+        console.error('Failed to fetch novel:', error);
+      } 
+			finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNovel();
+  }, [params.slug]);
+
+  return (
+    <>
+			{ isLoading ? <LibraryItemSkeleton /> : <LibraryItem novel={novel!} /> }
+		</>
+  );
+};
+
+export default Page;

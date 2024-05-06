@@ -1,7 +1,8 @@
-import Navbar from "@/components/shared/navbar"
-import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+import { createClient } from "@/lib/supabase/server";
+import Navbar from "@/components/shared/navbar"
 
 export const metadata: Metadata = {
   title: "Library",

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Toolbar from '@/components/library/toolbar/toolbar'
 import { Skeleton } from '@/components/ui/skeleton'
 

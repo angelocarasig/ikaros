@@ -1,8 +1,5 @@
 'use client';
 
-import React from 'react';
-import dynamic from 'next/dynamic';
-
 import { Novel } from '@/models/novel/novel';
 
 import { BookOpen } from 'lucide-react';
@@ -10,10 +7,10 @@ import { Button } from '../../ui/button';
 
 import LibraryItemTabs from './library-item-tabs';
 import { useRouter } from 'next/navigation';
+import StatisticsTab from './statistics-tab';
 
 function LibraryItem({novel}: { novel: Novel }) {
   const router = useRouter();
-  const StatisticsTab = dynamic(() => import('./statistics-tab'));
 
   return (
     <div className="w-full min-h-[90vh]">
@@ -50,11 +47,11 @@ function LibraryItem({novel}: { novel: Novel }) {
       </div>
 
       <div className="w-full h-full p-4 flex flex-col sm:flex-row gap-4">
-        <div className="rounded-lg w-full min-w-[20rem] sm:w-[20rem] h-min bg-slate-200 dark:bg-zinc-900 p-2">
+        <div className="rounded-lg w-full min-w-[20rem] sm:w-[20rem] h-min bg-zinc-200 dark:bg-zinc-900 p-2">
           <StatisticsTab novel={novel}/>
         </div>
 
-        <div className="rounded-lg grow bg-slate-200 dark:bg-zinc-900 p-2 min-h-[50vh]">
+        <div className="rounded-lg grow bg-zinc-200 dark:bg-zinc-900 p-2 min-h-[50vh]">
           <LibraryItemTabs novel={novel}/>
         </div>
       </div>

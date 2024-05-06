@@ -35,7 +35,7 @@ function StatisticsTab({ novel }: { novel: Novel }) {
         <Statistic title="Tags">
           <p className='text-muted-foreground select-none'>
             {SAMPLE_TAGS.map((tag, index) => (
-              <span key={index} className="hover:text-white cursor-pointer">
+              <span key={index} className="hover:text-black dark:hover:text-white cursor-pointer">
                 {tag}{index < SAMPLE_TAGS.length - 1 ? ', ' : ''}
               </span>
             ))}
@@ -51,7 +51,7 @@ function Statistic({ title, value, children }: { title: string, value?: string, 
   return (
     <div className='w-full'>
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{title}</h4>
-      <p className='leading-7 text-muted-foreground hover:text-white select-none cursor-pointer'>
+      <p className='leading-7 text-muted-foreground hover:text-black dark:hover:text-white select-none cursor-pointer'>
         {value != null && (value)}
       </p>
       {children}
