@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect } from 'react';
+import { MutableRefObject, useEffect, useLayoutEffect } from 'react';
 import { useTheme } from 'next-themes';
 
 import { Book, Location } from 'epubjs';
@@ -13,14 +13,20 @@ import useBookmarkStore from '@/store/useBookmarksStore';
 export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HTMLElement>) {
 	const { resolvedTheme } = useTheme();
 	const { book, rendition, setBook, setRendition, setLocations, setCurrentLocation, setTableOfContents } = useReaderStore();
-	const { bookmarks, loading } = useBookmarkStore();
+	const { bookmarks, loading, mostRecentBookmark } = useBookmarkStore();
 
 	/**
 	 * NOTE: To make this file easier to read, collapse setupRendition and setupTableOfContents
 	 */
 
+	/**
+	 * TODO: On exit with autosave, also update last read property of a novel.
+	 * The total percentage of the novel should be the highest value of the highest bookmark?
+	 * OR: Start implementing novel status alongside groups
+	 */
+
 	// Handle renditions
-	useEffect(() => {
+	useLayoutEffect(() => {
 		let isActive = true;
 
 		if (rendition != null) {
@@ -55,11 +61,7 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 
 				// Display
 				if (bookmarks.length > 0) {
-					const mostRecentBookmark = bookmarks.reduce((latest, current) => {
-						return latest.timestamp > current.timestamp ? latest : current;
-					});
-	
-					createdRendition.display(mostRecentBookmark.epubcfi);
+					createdRendition.display(mostRecentBookmark()?.epubcfi);
 				}
 				else {
 					createdRendition.display();

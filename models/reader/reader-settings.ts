@@ -68,6 +68,7 @@ const defaultSettings: RenditionSettings = {
   view: 'iframe',
 	defaultDirection: 'ltr',
 	// stylesheet: '@/styles/globals.css', // TODO: inject stylesheet
+	// ignoreClass: 'color', // Ignore color if possible ?
   snap: false,
   allowScriptedContent: false,
   resizeOnOrientationChange: true,

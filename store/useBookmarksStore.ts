@@ -9,6 +9,7 @@ interface BookmarkStoreState {
 	addBookmark: (bookmark: Bookmark) => Promise<void>;
 	updateBookmark: (bookmark: Bookmark) => Promise<void>;
   deleteBookmark: (bookmark: Bookmark) => Promise<void>;
+  mostRecentBookmark: () => Bookmark | null;
   loading: boolean;
 }
 
@@ -71,6 +72,21 @@ const useBookmarkStore = create<BookmarkStoreState>((set, get) => ({
     catch (error) {
 			console.error('Error refreshing novels: ', error);
 		}
+  },
+
+  mostRecentBookmark: () => {
+    const { bookmarks } = get();
+
+    if (bookmarks.length > 0) {
+      const mostRecentBookmark = bookmarks.reduce((latest, current) => {
+        return latest.timestamp > current.timestamp ? latest : current;
+      });
+
+      return mostRecentBookmark;
+    }
+    else {
+      return null;
+    }
   }
 }));
 

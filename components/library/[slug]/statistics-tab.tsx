@@ -1,18 +1,27 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Progress } from '../../ui/progress';
 import { getDate } from '@/lib/utils';
 import { SAMPLE_TAGS } from '@/constants';
 import { Novel, NovelStatus } from '@/models/novel/novel';
+import useBookmarkStore from '@/store/useBookmarksStore';
+import { Bookmark } from '@/models/novel/bookmark';
 
 function StatisticsTab({ novel }: { novel: Novel }) {
-  const [progress, setProgress] = React.useState(0)
+  const [bookmark, setBookmark] = useState<Bookmark | null>();
+  const { bookmarks, mostRecentBookmark, fetchBookmarks } = useBookmarkStore();
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500)
-    return () => clearTimeout(timer)
-  }, [])
+  // Whenever novel changes fetch updated bookmarks
+  useEffect(() => {
+    fetchBookmarks(novel.id);
+  }, [novel]);
+
+
+  // Whenever bookmarks change refetch the latest
+  useEffect(() => {
+    setBookmark(mostRecentBookmark());
+  }, [bookmarks]);
 
   return (
     <div className='p-4 w-full'>
@@ -21,8 +30,8 @@ function StatisticsTab({ novel }: { novel: Novel }) {
 
         <Statistic title="Progress">
           <div className='flex items-center justify-between mt-2'>
-            <Progress value={progress} className="w-5/6" />
-            <p>{progress}%</p>
+            <Progress value={bookmark == null ? 0 : bookmark.progress * 100} className="w-2/3" />
+            <p>{bookmark == null ? 0 : (bookmark.progress * 100).toFixed(2)}%</p>
           </div>
         </Statistic>
 

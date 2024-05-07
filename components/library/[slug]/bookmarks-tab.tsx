@@ -31,7 +31,7 @@ function BookmarksTab({ novel }: { novel: Novel }) {
                   <p>{bookmark.label}</p>
                   <p>{new Date(bookmark.timestamp).toLocaleString()}</p>
                   <div className='flex items-center gap-4 text-sm'>
-                    <Progress value={bookmark.progress} className="w-[7rem]" />
+                    <Progress value={bookmark.progress * 100} className="w-[7rem]" />
                     <p>{toPercentage(bookmark.progress)}%</p>
                   </div>
                 </div>

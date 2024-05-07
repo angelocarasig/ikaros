@@ -1,4 +1,5 @@
-import React, { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
+import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import useBookmarkStore from '@/store/useBookmarksStore';
@@ -29,6 +30,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import ReaderMenuBookmark from './reader-menu-bookmark';
+import { cn, getDate } from '@/lib/utils';
+import { Skeleton } from '../ui/skeleton';
 
 enum SidebarTabItems {
   INFORMATION = 'Information',
@@ -52,7 +55,7 @@ function ReaderMenuSidebar({ novel }: { novel: Novel }) {
       </TabsList>
 
       <TabsContent value={SidebarTabItems.INFORMATION}>
-        {currentTab === SidebarTabItems.INFORMATION && <></>}
+        {currentTab === SidebarTabItems.INFORMATION && <Overview novel={novel} />}
       </TabsContent>
 
       <TabsContent value={SidebarTabItems.TABLEOFCONTENTS}>
@@ -84,6 +87,69 @@ function ReaderMenuSidebar({ novel }: { novel: Novel }) {
   )
 }
 
+function Overview({ novel }: { novel: Novel }) {
+  // Reusing values from NovelCard
+  const imageProps = "h-[10rem] md:h-[14rem] lg:h-[18rem]";
+
+  return (
+    <div className='relative flex flex-col gap-2 w-full h-full justify-center items-center'>
+      <>
+        {novel.cover_url != null ? (
+          <Image
+            src={novel.cover_url}
+            alt="novel cover"
+            className={cn(
+              "aspect-[11/16] w-min object-cover rounded data-[loaded=false]:animate-pulse data-[loaded=false]:bg-gray-100/10 select-none",
+              imageProps
+            )}
+            width={300}
+            height={400}
+            loading="eager"
+            data-loaded="false"
+            onLoad={event => {
+              event.currentTarget.setAttribute('data-loaded', 'true');
+            }}
+            priority
+          />
+        ) : (
+          <Skeleton
+            className={cn(
+              "aspect-[11/16] w-min object-cover rounded cursor-pointer flex items-center justify-center text-center",
+              imageProps
+            )}>
+            <p>No Cover Available.</p>
+          </Skeleton>
+        )}
+      </>
+      <div className='w-full mt-4 border-b'>
+        <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+          {novel.title}
+        </h2>
+        <p className="leading-7 text-muted-foreground mb-4">
+          {novel.author}
+        </p>
+        <div className='flex flex-col gap-2 mb-4'>
+          <p className="leading-7 flex justify-between">
+            <span>Published At:</span>
+            <span>{getDate(novel.created_at)}</span>
+          </p>
+          <p className="leading-7 flex justify-between">
+            <span>Uploaded At:</span>
+            <span>{getDate(novel.created_at)}</span>
+          </p>
+          <p className="leading-7 flex justify-between">
+            <span>Last Updated At:</span>
+            <span>{getDate(novel.updated_at)}</span>
+          </p>
+        </div>
+      </div>
+      <blockquote className="w-full justify-start mt-4 italic">
+        {novel.description || 'No Description Available.'}
+      </blockquote>
+    </div>
+  )
+}
+
 function Bookmarks({ novel }: { novel: Novel }) {
   const { bookmarks } = useBookmarkStore();
   const { currentLocation } = useReaderStore();
@@ -105,7 +171,7 @@ function Bookmarks({ novel }: { novel: Novel }) {
         </>
       ) : (
         <>
-          <h2 className="mt-10 text-center scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          <h2 className="text-center scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight transition-colors first:mt-0">
             No bookmarks found! Add a bookmark below?
           </h2>
           <ReaderMenuBookmark currentLocation={currentLocation} novelId={novel.id} />
