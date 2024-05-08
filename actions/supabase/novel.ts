@@ -30,3 +30,8 @@ export async function getNovel(novelId: string): Promise<Novel> {
 
 	return selectedNovel as Novel;
 }
+
+export async function getSignedUrl(bucket: string, directory: string) {
+	const supabase = createClient();
+	return supabase.storage.from(bucket).createSignedUploadUrl(directory);
+}

@@ -98,7 +98,7 @@ export const nameWithoutExtension = (x: string) => {
 	return x.replace(/\.[^/.]+$/, "");
 }
 
-export const getFileUrl = (filename: string) => {
+export const getFileUrl = (filename: string | null) => {
 	// In case when file URL is null or undefined just return it let smth else handle it
 	if (filename == null) {
 		return filename;

@@ -10,20 +10,20 @@ import ePub from 'epubjs';
 import { Loader2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle, 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
   FormMessage
- } from '@/components/ui/form';
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
 import { EpubUploadHandler } from '@/lib/upload-novel';
@@ -31,6 +31,7 @@ import { createClient } from '@/lib/supabase/client';
 
 import { Novel } from '@/models/novel/novel';
 
+import { getSignedUrl } from '@/actions/supabase/novel';
 import { useUser } from '@/hooks/useUser';
 import { useNovels } from '@/store/useNovelStore';
 
@@ -39,7 +40,7 @@ import { BUCKETS } from '@/constants';
 
 export default function UploadDialog() {
   const { user } = useUser();
-  const supabase = createClient();
+  const { novels } = useNovels();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,12 +61,13 @@ export default function UploadDialog() {
   // Defined as partial since id will be auto-generated
   const insertIntoDb = async (novel: Partial<Novel>) => {
     console.log("Inserting Novel to DB: ", novel);
+    const supabase = createClient();
 
     const { error } = await supabase.from('novels').insert(novel);
 
-		if (error != null) {
-			throw error;
-		}
+    if (error != null) {
+      throw error;
+    }
   }
 
   const uploadMultiple = async (files: Array<File>, bucket: string, baseDirectory: string): Promise<Array<any>> => {
@@ -78,17 +80,29 @@ export default function UploadDialog() {
   }
 
   const uploadFile = async (file: File, bucket: string, directory: string) => {
-    const { data, error } = await supabase
-      .storage
-      .from(bucket)
-      .upload(directory, file, { upsert: true });
+    const { data: signData, error: signError } = await getSignedUrl(bucket, directory);
 
-    if (error) {
-      console.error("Error Uploading File: ", error);
-      throw new Error(error.message);
+    if (signError) {
+      console.error("Error Creating Signed URL: ", signError);
+      throw new Error(signError.message);
     }
 
-    return data as any;
+    const response = await fetch(signData.signedUrl, {
+      method: 'PUT',
+      body: file,
+      headers: {
+        "Content-Type": file.type
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error("Error Uploading File: ", response.text);
+      throw new Error(result);
+    }
+
+    return result as { Key: string };
   }
 
   const getNovelMetadata = async (buffer: string | ArrayBuffer) => {
@@ -104,6 +118,10 @@ export default function UploadDialog() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (data.files.length > 10) {
       toast.error("Only up to 10 files can be submitted at a time. Please try again.");
+
+      if (novels.length + data.files.length > 30) {
+        toast.error("Only up to 30 novels can be imported currently. Please try again.");
+      }
       return;
     }
     setLoading(true);
@@ -131,7 +149,7 @@ export default function UploadDialog() {
 
               const [novelUploadResult, coverUploadResult, artworkUploadResult] = await Promise.all([
                 uploadFile(currentNovelFile, BUCKETS.Novels, `${basePath}/${sanitizeFilename(currentNovelFile.name)}`),
-                cover != null && uploadFile(cover, BUCKETS.Covers, `${basePath}/${cover.name}`),
+                cover == null ? null : uploadFile(cover, BUCKETS.Covers, `${basePath}/${cover.name}`),
                 uploadMultiple(artwork, BUCKETS.Artwork, basePath)
               ]);
 
@@ -142,9 +160,9 @@ export default function UploadDialog() {
               await insertIntoDb({
                 ...metadata,
                 owner_id: user!.id,
-                file_url: getFileUrl(novelUploadResult.fullPath),
-                cover_url: getFileUrl(coverUploadResult.fullPath),
-                artwork: artworkUploadResult.map(art => getFileUrl(art.fullPath))
+                file_url: getFileUrl(novelUploadResult.Key)!,
+                cover_url: getFileUrl(coverUploadResult?.Key ?? null)!,
+                artwork: artworkUploadResult.map(art => getFileUrl(art.Key)!)
               });
               resolve('Finished');
             }
@@ -160,7 +178,10 @@ export default function UploadDialog() {
         success: () => {
           return `Finished uploading ${currentNovelFile.name}.`;
         },
-        error: () => {
+        error: (error: Error) => {
+          if (error.message.includes("resource already exists")) {
+            return `Novel ${currentNovelFile.name} already exists in your library. Did you mean to update it?`;
+          }
           return `Couldn't upload ${currentNovelFile.name}.`;
         }
       })
@@ -171,7 +192,11 @@ export default function UploadDialog() {
     // Remove modal
     // When fully uploaded, refresh library
     setOpen(false);
-    Promise.all(fileReaders).finally(() => {
+    Promise.all(fileReaders)
+    .catch((error) => {
+      console.error('A file upload failed:', error);
+    })
+    .finally(() => {
       refreshNovels();
       setLoading(false);
     });

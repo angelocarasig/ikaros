@@ -45,6 +45,16 @@ export class EpubUploadHandler {
 			.filter((value: Array<Asset>) => value[0].type.toLowerCase().includes('image') && value[0].href.toLowerCase().includes('cover'))
 			.map(value => value[1]);
 
+		// If no replacement URLs with image tag 'cover' found, return 1st image
+		if (artworkUrls.length <= 0) {
+			const firstImageUrl: Array<string> = zip(assets, replacementUrls)
+			.filter((value: Array<Asset>) => value[0].type.toLowerCase().includes('image'))
+			.map(value => value[1])
+
+			return firstImageUrl[0] ?? null;
+		}
+
+		// Otherwise return the 1st image that has tag 'cover'
 		return artworkUrls[0] ?? null;
 	}
 
