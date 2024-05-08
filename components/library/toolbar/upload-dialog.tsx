@@ -118,12 +118,13 @@ export default function UploadDialog() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (data.files.length > 10) {
       toast.error("Only up to 10 files can be submitted at a time. Please try again.");
-
-      if (novels.length + data.files.length > 30) {
-        toast.error("Only up to 30 novels can be imported currently. Please try again.");
-      }
       return;
     }
+    if (novels.length + data.files.length > 30) {
+      toast.error("Only up to 30 novels can be imported currently.");
+      return;
+    }
+
     setLoading(true);
     const fileReaders = [];
 
