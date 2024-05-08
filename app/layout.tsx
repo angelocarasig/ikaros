@@ -1,6 +1,7 @@
 import React from "react";
 import '@/styles/globals.css';
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react"
 
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
@@ -24,20 +25,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Analytics />
       <body className={cn(
-          "min-h-screen bg-background font-sans antialiased transition-colors",
-          fontSans.variable
-        )}>
+        "min-h-screen bg-background font-sans antialiased transition-colors",
+        fontSans.variable
+      )}>
         <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
           {children}
-          <Toaster expand={true} visibleToasts={10} richColors toastOptions={{ duration: 20000 }}/>
-				</ThemeProvider>
-        </body>
+          <Toaster expand={true} visibleToasts={10} richColors toastOptions={{ duration: 20000 }} />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
