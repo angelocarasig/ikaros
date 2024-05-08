@@ -23,10 +23,10 @@ export interface RenditionSettings extends RenditionOptions {
 	flow?: 'paginated' | 'scrolled' | 'scrolled-continuous' | 'scrolled-doc' | 'fixed';
 
 	/** The layout to be used for the content, typically defined by a CSS file. */
-	layout?: 'reflowable';
+	layout?: 'reflowable' | 'pre-paginated';
 
 	/** The behavior of content spreading across pages or screens. */
-	spread?: 'none';
+	spread?: 'none' | 'always' | 'auto';
 
 	/** Minimum width number in pixels before a spread layout is used. */
 	minSpreadWidth?: number;
@@ -65,27 +65,31 @@ export interface RenditionSettings extends RenditionOptions {
 const defaultSettings: RenditionSettings = {
 	width: '100%',
 	height: '100%',
-  view: 'iframe',
+	view: 'iframe',
 	defaultDirection: 'ltr',
+	minSpreadWidth: 1000,
+	spread: 'auto',
+	layout: 'reflowable',
+	snap: false,
+	allowScriptedContent: false,
+	resizeOnOrientationChange: true,
+	fullsize: false,
+	offset: 0,
+
 	// stylesheet: '@/styles/globals.css', // TODO: inject stylesheet
 	// ignoreClass: 'color', // Ignore color if possible ?
-  snap: false,
-  allowScriptedContent: false,
-  resizeOnOrientationChange: true,
-	fullsize: true,
-	offset: 0
-}
+};
 
 export const defaultScrollSettings: RenditionSettings = {
-  ...defaultSettings,
-  flow: 'scrolled-doc',
+	...defaultSettings,
+	flow: 'scrolled-doc',
 	manager: 'continuous',
-  infinite: true,
+	fullsize: true,
+	infinite: true
 };
 
 export const defaultPaginatedSettings: RenditionSettings = {
-  ...defaultSettings,
-  flow: 'paginated',
+	...defaultSettings,
+	flow: 'paginated',
 	manager: 'default',
-  infinite: true,
 };

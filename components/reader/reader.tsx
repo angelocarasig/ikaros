@@ -24,7 +24,7 @@ function Reader({ novel }: { novel: Novel }) {
   return (
     <>
       { rendition == null ? <ReaderLoader /> : <ReaderMenu novel={novel} /> }
-      <div className="w-full h-full p-8">
+      <div className="w-full h-full p-8 overflow-x">
         <div ref={readerRef} className='h-full w-full border border-solid border-t-muted' />
       </div>
     </>

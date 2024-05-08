@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import {
@@ -9,7 +10,6 @@ import {
 	Palette,
 	Search,
 	List,
-	Bookmark,
 	Play,
 	Columns2,
 	ChevronsUpDown,
@@ -22,16 +22,14 @@ import {
 } from 'lucide-react';
 
 import { Button } from '../ui/button';
-
-import ThemeSwitch from '../shared/theme-switch';
-
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTrigger,
 } from "@/components/ui/sheet"
-import { useRouter } from 'next/navigation';
+
+import ThemeSwitch from '../shared/theme-switch';
 import { Novel } from '@/models/novel/novel';
 import useReaderStore from '@/store/useReaderStore';
 import { toPercentage } from '@/lib/utils';
@@ -68,11 +66,23 @@ const itemVariants = {
 function ReaderMenu({ novel }: { novel: Novel }) {
 	const { currentLocation, prevSection, nextSection, getPageNumber } = useReaderStore();
 	const [showMenu, setShowMenu] = useState(false);
+	const [sheetOpened, setSheetOpened] = useState(false);
 	const router = useRouter();
 
 	// TODO: Convert below to custom hook:
 	const [viewMode, setViewMode] = useState('infinite');
 	const [autoplay, setAutoplay] = useState(false);
+
+	// If a sheet is opened, and then closed, the menu should also be closed.
+	useEffect(() => {
+    let handleVisibilityChange = () => {
+      if (!sheetOpened) {
+        setShowMenu(false);
+      }
+    };
+
+    handleVisibilityChange();
+  }, [sheetOpened]);
 
 	return (
 		<div className="fixed bottom-4 right-4 z-10">
@@ -112,7 +122,7 @@ function ReaderMenu({ novel }: { novel: Novel }) {
 							animate="visible"
 							exit="exit"
 							variants={containerVariants}>
-							<Sheet>
+							<Sheet onOpenChange={(open) => setSheetOpened(open)}>
 								<SheetTrigger>
 									<motion.div variants={itemVariants} onClick={() => console.log("Clicked contents")}>
 										<div className="relative w-[15rem] h-[3rem] rounded-xl bg-muted m-4 py-2 px-4 flex items-center justify-between hover:cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-700 transition-colors">

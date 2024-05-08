@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import ReaderMenu from '@/components/reader/reader-menu';
 import { getAllNovels } from '@/actions/supabase/novel';
 import { redirect } from 'next/navigation';
 import dynamic from 'next/dynamic';

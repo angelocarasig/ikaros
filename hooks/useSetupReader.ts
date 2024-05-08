@@ -6,7 +6,7 @@ import { Book, Location } from 'epubjs';
 import { ToCItem } from '@/models/reader/toc-item';
 
 import { defaultReaderTheme } from '@/models/reader/reader-themes';
-import { defaultScrollSettings } from '@/models/reader/reader-settings';
+import { defaultPaginatedSettings, defaultScrollSettings } from '@/models/reader/reader-settings';
 import useReaderStore from '@/store/useReaderStore';
 import useBookmarkStore from '@/store/useBookmarksStore';
 
@@ -41,8 +41,9 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 				await currentBook.ready;
 				if (!isActive || loading) return;
 
-				// Init
-				const createdRendition = currentBook.renderTo(readerRef.current, defaultScrollSettings);
+				// Init, default to paginated for stability currently
+				const createdRendition = currentBook.renderTo(readerRef.current, defaultPaginatedSettings);
+				// const createdRendition = currentBook.renderTo(readerRef.current, defaultScrollSettings);
 				const locations = await currentBook.locations.generate(1000); // Maybe good to use localstorage here
 				console.log("Locations: ", locations);
 				setLocations(locations);
