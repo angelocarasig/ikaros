@@ -18,7 +18,7 @@ export class EpubUploadHandler {
 				description: metadata.description,
 				created_at: new Date(),
 				updated_at: new Date(),
-				published_at: new Date(metadata.pubdate)
+				published_at: new Date(metadata.date)
 			};
 		});
 

@@ -42,8 +42,8 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 				if (!isActive || loading) return;
 
 				// Init, default to paginated for stability currently
-				const createdRendition = currentBook.renderTo(readerRef.current, defaultPaginatedSettings);
-				// const createdRendition = currentBook.renderTo(readerRef.current, defaultScrollSettings);
+				// const createdRendition = currentBook.renderTo(readerRef.current, defaultPaginatedSettings);
+				const createdRendition = currentBook.renderTo(readerRef.current, defaultScrollSettings);
 				const locations = await currentBook.locations.generate(1000); // Maybe good to use localstorage here
 				console.log("Locations: ", locations);
 				setLocations(locations);

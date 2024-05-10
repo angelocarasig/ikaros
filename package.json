@@ -34,7 +34,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-autoplay": "^8.0.2",
     "embla-carousel-react": "^8.0.2",
-    "epubjs": "^0.3.93",
+    "epubjs": "github:angelocarasig/epub.js#9690a42",
     "framer-motion": "^11.1.7",
     "jszip": "3.7.1",
     "lucide-react": "^0.376.0",

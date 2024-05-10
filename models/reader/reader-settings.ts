@@ -74,7 +74,7 @@ const defaultSettings: RenditionSettings = {
 	allowScriptedContent: false,
 	resizeOnOrientationChange: true,
 	fullsize: false,
-	offset: 0,
+	offset: 10,
 
 	// stylesheet: '@/styles/globals.css', // TODO: inject stylesheet
 	// ignoreClass: 'color', // Ignore color if possible ?
@@ -82,8 +82,8 @@ const defaultSettings: RenditionSettings = {
 
 export const defaultScrollSettings: RenditionSettings = {
 	...defaultSettings,
-	flow: 'scrolled-doc',
-	manager: 'continuous',
+	flow: 'scrolled',
+	manager: 'default',
 	fullsize: true,
 	infinite: true
 };
