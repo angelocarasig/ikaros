@@ -35,6 +35,9 @@ function ReaderMenuBookmark({ currentLocation, novelId }: { currentLocation: Loc
     label: z.string()
       .min(3, { message: "Label must be at least 3 characters long." })
       .max(20, { message: "Label must be no more than 20 characters long." })
+      .refine((value) => !/autosave/i.test(value), {
+        message: "The word 'autosave' is reserved for autosave functionality."
+      })
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,8 +68,8 @@ function ReaderMenuBookmark({ currentLocation, novelId }: { currentLocation: Loc
       success: () => {
         return `Added Bookmark ${data.label}!`;
       },
-      error: () => {
-        return `Failed to add Bookmark ${data.label}!`;
+      error: (error) => {
+        return error.message;
       }
     })
 

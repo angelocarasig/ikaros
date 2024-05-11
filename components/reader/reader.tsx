@@ -18,12 +18,12 @@ function Reader({ novel }: { novel: Novel }) {
   const readerRef = useRef<HTMLDivElement>(null);
 
   const { rendition } = useReaderStore();
-  useSetupReader(currentNovel, readerRef as MutableRefObject<HTMLDivElement>);
+  useSetupReader(currentNovel, readerRef as MutableRefObject<HTMLDivElement>, novel);
   useBookmarks(novel);
   
   return (
     <>
-      { rendition == null ? <ReaderLoader /> : <ReaderMenu novel={novel} /> }
+      { rendition == null ? <div className='absolute w-screen h-screen'><ReaderLoader /></div> : <ReaderMenu novel={novel} /> }
       <div className="w-full h-full p-8 overflow-x">
         <div ref={readerRef} className='h-full w-full border border-solid border-t-muted' />
       </div>

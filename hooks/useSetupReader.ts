@@ -9,11 +9,15 @@ import { defaultReaderTheme } from '@/models/reader/reader-themes';
 import { defaultPaginatedSettings, defaultScrollSettings } from '@/models/reader/reader-settings';
 import useReaderStore from '@/store/useReaderStore';
 import useBookmarkStore from '@/store/useBookmarksStore';
+import { useUser } from './useUser';
+import { Bookmark } from '@/models/novel/bookmark';
+import { Novel } from '@/models/novel/novel';
 
-export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HTMLElement>) {
+export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HTMLElement>, novel: Novel) {
 	const { resolvedTheme } = useTheme();
-	const { book, rendition, setBook, setRendition, setLocations, setCurrentLocation, setTableOfContents } = useReaderStore();
-	const { bookmarks, loading, mostRecentBookmark } = useBookmarkStore();
+	const { book, rendition, currentLocation, setBook, setRendition, setLocations, setCurrentLocation, setTableOfContents } = useReaderStore();
+	const { bookmarks, loading, mostProgressedBookmark } = useBookmarkStore();
+	const { user } = useUser();
 
 	/**
 	 * NOTE: To make this file easier to read, collapse setupRendition and setupTableOfContents
@@ -60,9 +64,8 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 					
 				});
 
-				// Display
 				if (bookmarks.length > 0) {
-					createdRendition.display(mostRecentBookmark()?.epubcfi);
+					createdRendition.display(mostProgressedBookmark()?.epubcfi);
 				}
 				else {
 					createdRendition.display();
@@ -128,4 +131,22 @@ export function useSetupReader(currentBook: Book, readerRef: MutableRefObject<HT
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rendition, resolvedTheme]);
+
+	// Autosave feature
+	useEffect(() => {
+		// Include autosave off return early here too
+		if (user == null || currentLocation == null) return;
+
+		const newAutosaveBookmark: Bookmark = {
+			novel_id: novel.id,
+			owner_id: user!.id,
+			label: 'Autosave',
+			epubcfi: currentLocation!.end.cfi,
+			progress: currentLocation!.end.percentage,
+			location: currentLocation!.end.location,
+			timestamp: new Date()
+		}
+
+		localStorage.setItem(novel.id, JSON.stringify(newAutosaveBookmark));
+	}, [currentLocation]);
 }

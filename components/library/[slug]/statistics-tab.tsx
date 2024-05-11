@@ -10,7 +10,7 @@ import { Bookmark } from '@/models/novel/bookmark';
 
 function StatisticsTab({ novel }: { novel: Novel }) {
   const [bookmark, setBookmark] = useState<Bookmark | null>();
-  const { bookmarks, mostRecentBookmark, fetchBookmarks } = useBookmarkStore();
+  const { bookmarks, mostProgressedBookmark, fetchBookmarks } = useBookmarkStore();
 
   // Whenever novel changes fetch updated bookmarks
   useEffect(() => {
@@ -20,7 +20,7 @@ function StatisticsTab({ novel }: { novel: Novel }) {
 
   // Whenever bookmarks change refetch the latest
   useEffect(() => {
-    setBookmark(mostRecentBookmark());
+    setBookmark(mostProgressedBookmark());
   }, [bookmarks]);
 
   return (

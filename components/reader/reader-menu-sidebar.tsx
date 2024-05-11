@@ -20,7 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
@@ -154,7 +154,11 @@ function Bookmarks({ novel }: { novel: Novel }) {
   const { bookmarks } = useBookmarkStore();
   const { currentLocation } = useReaderStore();
 
-  console.log("Bookmarks: ", bookmarks);
+  const sortedBookmarks = bookmarks.sort((a, b) => {
+    if (a.label === "Autosave") return -1;
+    if (b.label === "Autosave") return 1;
+    return 0;
+  });
 
   return (
     <div className='flex flex-col gap-2'>
@@ -163,9 +167,9 @@ function Bookmarks({ novel }: { novel: Novel }) {
         <p>Date</p>
         <p className='justify-self-end pr-2'>Edit</p>
       </div>
-      {bookmarks.length > 0 ? (
+      {sortedBookmarks.length > 0 ? (
         <>
-          {bookmarks.map((value, index) => (
+          {sortedBookmarks.map((value, index) => (
             <BookmarkItem value={value} key={index} />
           ))}
         </>
@@ -294,6 +298,7 @@ function BookmarkItem({ value }: { value: Bookmark }) {
             variant="secondary"
             size="icon"
             className='h-auto'
+            disabled={value.label === 'Autosave'}
             onClick={() => { setOpen(true) }}>
             <Pencil />
           </Button>

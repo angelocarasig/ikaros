@@ -1,6 +1,6 @@
 {
   "name": "ikaros",
-  "version": "0.1.4.6",
+  "version": "0.1.4.7",
   "private": true,
   "scripts": {
     "dev": "next dev",

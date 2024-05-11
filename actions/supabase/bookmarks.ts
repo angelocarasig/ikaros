@@ -14,11 +14,14 @@ export async function addBookmark(bookmark: Bookmark): Promise<Bookmark> {
 	const supabase = createClient();
 	const { data, error } = await supabase.from('bookmarks').insert(bookmark).select();
 
-	if (error) {
+	if (error && error.message.includes('violates unique constraint "unique_novel_owner_label"')) {
+		throw new Error("A bookmark already exists for that name for this novel.");
+	}
+	else if (error) {
 		throw error;
 	}
 
-	return data[0] as unknown as Bookmark;
+	return data![0] as unknown as Bookmark;
 }
 
 export async function updateBookmark(bookmark: Bookmark): Promise<Bookmark> {
@@ -43,4 +46,12 @@ export async function deleteBookmark(bookmark: Bookmark): Promise<void> {
 	const { error } = await supabase.from('bookmarks').delete().eq('id', bookmark.id);
 
 	if (error) throw error;
+}
+
+export async function upsertBookmark(bookmark: Bookmark): Promise<Bookmark> {
+	const supabase = createClient();
+	const { data, error } = await supabase.from('bookmarks').upsert(bookmark, { onConflict: "novel_id,owner_id,label" }).select();
+	if (error) throw error;
+
+	return data[0] as unknown as Bookmark;
 }

@@ -1,4 +1,4 @@
-import { addBookmark, deleteBookmark, getBookmarks, updateBookmark } from "@/actions/supabase/bookmarks";
+import { addBookmark, deleteBookmark, getBookmarks, updateBookmark, upsertBookmark } from "@/actions/supabase/bookmarks";
 import { Bookmark } from "@/models/novel/bookmark";
 import { create } from "zustand";
 
@@ -9,7 +9,9 @@ interface BookmarkStoreState {
 	addBookmark: (bookmark: Bookmark) => Promise<void>;
 	updateBookmark: (bookmark: Bookmark) => Promise<void>;
   deleteBookmark: (bookmark: Bookmark) => Promise<void>;
+  autosaveBookmark: (bookmark: Bookmark) => Promise<void>;
   mostRecentBookmark: () => Bookmark | null;
+  mostProgressedBookmark: () => Bookmark | null;
   loading: boolean;
 }
 
@@ -41,6 +43,7 @@ const useBookmarkStore = create<BookmarkStoreState>((set, get) => ({
 		} 
     catch (error) {
 			console.error('Error refreshing novels: ', error);
+      return Promise.reject(error);
 		}
   },
 
@@ -74,6 +77,21 @@ const useBookmarkStore = create<BookmarkStoreState>((set, get) => ({
 		}
   },
 
+  autosaveBookmark: async (bookmark: Bookmark) => {
+    try {
+      const upsertedBookmark = await upsertBookmark(bookmark);
+
+      const { bookmarks } = get();
+      const updatedBookmarks = bookmarks.map(b => 
+        b.id === upsertedBookmark.id ? upsertedBookmark : b
+      );
+      
+			set({ bookmarks: [ ...updatedBookmarks ] });
+    } catch (error) {
+      console.error('Error generating autosave...');
+    }
+  },
+
   mostRecentBookmark: () => {
     const { bookmarks } = get();
 
@@ -83,6 +101,21 @@ const useBookmarkStore = create<BookmarkStoreState>((set, get) => ({
       });
 
       return mostRecentBookmark;
+    }
+    else {
+      return null;
+    }
+  },
+
+  mostProgressedBookmark: () => {
+    const { bookmarks } = get();
+
+    if (bookmarks.length > 0) {
+      const mostProgressedBookmark = bookmarks.reduce((latest, current) => {
+        return latest.progress > current.progress ? latest : current;
+      });
+
+      return mostProgressedBookmark;
     }
     else {
       return null;

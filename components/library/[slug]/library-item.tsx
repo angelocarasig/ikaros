@@ -18,7 +18,7 @@ function LibraryItem({novel}: { novel: Novel }) {
         <div
           id="background"
           className="absolute w-full h-full object-cover select-none bg-cover bg-center blur-[2px] brightness-50"
-          style={{ backgroundImage: `url('${novel?.cover_url}')` }}
+          style={{ backgroundImage: `url("${novel?.cover_url}")` }}
         />
         <div
           id="backgroundFilter"
@@ -27,7 +27,7 @@ function LibraryItem({novel}: { novel: Novel }) {
             <div
               id="novelCover"
               className="rounded aspect-[11/16] h-[14rem] transition ease-in-out bg-cover bg-center"
-              style={{ backgroundImage: `url('${novel?.cover_url}')` }}
+              style={{ backgroundImage: `url("${novel?.cover_url}")` }}
             />
             <div className="flex flex-col self-stretch text-white">
               <h1 className="text-2xl font-bold line-clamp-3">
