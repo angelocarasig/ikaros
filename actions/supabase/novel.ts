@@ -31,6 +31,20 @@ export async function getNovel(novelId: string): Promise<Novel> {
 	return selectedNovel as Novel;
 }
 
+export async function updateNovel(novel: Novel): Promise<Novel> {
+	const supabase = createClient();
+
+	console.log("Updating ", novel);
+	const { data, error } = await supabase.from('novels').upsert(novel).select();
+
+	console.log('Data: ', data);
+	console.log('Error: ', error);
+
+	const selectedNovel = data != null ? data[0] : null;
+
+	return selectedNovel as Novel;
+}
+
 export async function getSignedUrl(bucket: string, directory: string) {
 	const supabase = createClient();
 	return supabase.storage.from(bucket).createSignedUploadUrl(directory);

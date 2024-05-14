@@ -12,12 +12,14 @@ import { Novel } from '@/models/novel/novel';
 
 import ReaderMenu from './reader-menu';
 import ReaderLoader from '@/app/reader/[slug]/loading';
+import { useSetupNovel } from '@/hooks/useSetupNovel';
 
 function Reader({ novel }: { novel: Novel }) {
   const currentNovel = useMemo(() => Epub(novel.file_url), [novel]);
   const readerRef = useRef<HTMLDivElement>(null);
 
   const { rendition } = useReaderStore();
+  useSetupNovel(novel);
   useSetupReader(currentNovel, readerRef as MutableRefObject<HTMLDivElement>, novel);
   useBookmarks(novel);
   

@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { Novel } from '@/models/novel/novel';
-import { getAllNovels } from '@/actions/supabase/novel';
+import { getAllNovels, updateNovel } from '@/actions/supabase/novel';
 import { useEffect } from 'react';
 import { useUser } from '@/hooks/useUser';
 
 interface NovelStoreState {
 	novels: Array<Novel>;
+	updateNovel: (novel: Novel) => Promise<void>;
 	refreshNovels: () => Promise<void>;
 	setNovels: (newNovels: Array<Novel>) => void;
 	clearNovels: () => void;
@@ -13,6 +14,12 @@ interface NovelStoreState {
 
 const useNovelStore = create<NovelStoreState>((set) => ({
 	novels: [],
+
+	updateNovel: async (novel: Novel) => {
+		await updateNovel(novel);
+		/** Do not trigger an update here as it will infinitely loop, and it currently isn't necessary */
+	},
+
 	refreshNovels: async () => {
 		try {
 			const response = await getAllNovels();
@@ -31,7 +38,7 @@ const useNovelStore = create<NovelStoreState>((set) => ({
 
 export const useNovels = (initialNovels?: Array<Novel>) => {
 	const { user } = useUser();
-	const { novels, refreshNovels, setNovels, clearNovels } = useNovelStore();
+	const { novels, updateNovel, refreshNovels, setNovels, clearNovels } = useNovelStore();
 
 	useEffect(() => {
 		if (user == null) {
@@ -48,5 +55,5 @@ export const useNovels = (initialNovels?: Array<Novel>) => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
-	return { novels, refreshNovels, setNovels, clearNovels };
+	return { novels, updateNovel, refreshNovels, setNovels, clearNovels };
 };

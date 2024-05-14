@@ -77,7 +77,7 @@ export default function FilterDialog() {
 					</AccordionContent>
 				</AccordionItem>
 
-				<AccordionItem disabled value={DateFilterOption.LAST_READ}>
+				<AccordionItem value={DateFilterOption.LAST_READ}>
 					<AccordionTrigger>
 						<div className="disabled:bg-white flex w-full h-full items-center justify-between">
 							<span>{DateFilterOption.LAST_READ}</span>

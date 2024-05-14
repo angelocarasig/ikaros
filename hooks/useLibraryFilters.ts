@@ -25,7 +25,7 @@ function filterAndSort(novels: Array<Novel>, settings: LibrarySettings): Array<N
 				let dateToCompare: Date | undefined;
 				switch (key as DateFilterOption) {
 					case DateFilterOption.LAST_READ:
-						// TODO
+						dateToCompare = novel.last_read != null ? new Date(novel.last_read) : undefined;
 						break;
 					case DateFilterOption.RECENTLY_UPDATED:
 						dateToCompare = new Date(novel.updated_at);
@@ -63,18 +63,20 @@ function filterAndSort(novels: Array<Novel>, settings: LibrarySettings): Array<N
 				sortValue = a.author.localeCompare(b.author);
 				break;
 			case SortOption.LAST_READ:
-				// TODO
+				// When sorting, if last_read is null we use 0 which returns the earliest possible date hence should be sorted
+				// at the bottom
+				sortValue = new Date(b.last_read ?? 0).getTime() - new Date(a.last_read ?? 0).getTime();
 				break;
 			case SortOption.RECENTLY_UPDATED:
-				sortValue = new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime();
+				sortValue = new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
 				break;
 			case SortOption.DATE_ADDED:
-				sortValue = new Date(a.created_at).getTime() - new Date(b.updated_at).getTime();
+				sortValue = new Date(b.created_at).getTime() - new Date(a.updated_at).getTime();
 				break;
 			case SortOption.PUBLICATION_DATE:
 				const pubDateA = a.metadata.dates.find((d) => d.event === 'Publication')?.date;
 				const pubDateB = b.metadata.dates.find((d) => d.event === 'Publication')?.date;
-				sortValue = pubDateA?.getTime()! - pubDateB?.getTime()!;
+				sortValue = pubDateB?.getTime()! - pubDateA?.getTime()!;
 				break;
 		}
 		return settings.sortDirection === SortDirection.DESCENDING ? sortValue : -sortValue;

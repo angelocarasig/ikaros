@@ -47,7 +47,10 @@ export default function DashboardContent({novels, carouselNovels, randomNovels}:
           </div>
         </div>
 
-        <DashboardItemRow itemTitle="Continue Reading" novels={novels.slice(0, 20)}/>
+        <DashboardItemRow itemTitle="Continue Reading" novels={novels
+        .sort((a, b) => new Date(b.last_read ?? 0).getTime() - new Date(a.last_read ?? 0).getTime())
+        .slice(0, 20)
+        }/>
         <DashboardItemRow itemTitle="Recently Added" novels={novels
           .slice() // Create new novels object
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())

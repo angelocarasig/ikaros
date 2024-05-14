@@ -23,10 +23,21 @@ function StatisticsTab({ novel }: { novel: Novel }) {
     setBookmark(mostProgressedBookmark());
   }, [bookmarks]);
 
+  const getStatus = () => {
+    const progressValue = bookmark == null ? 0 : bookmark.progress * 100;
+    if (progressValue === 0) {
+      return NovelStatus.PLANTOREAD;
+    }
+    else if (progressValue !== 100) {
+      return NovelStatus.ONGOING
+    }
+    else return NovelStatus.COMPLETED
+  }
+
   return (
     <div className='p-4 w-full'>
       <div className='flex flex-col gap-4 items-start justify-center'>
-        <Statistic title="Status" value={NovelStatus.ONGOING} />
+        <Statistic title="Status" value={getStatus()} />
 
         <Statistic title="Progress">
           <div className='flex items-center justify-between mt-2'>
@@ -35,7 +46,7 @@ function StatisticsTab({ novel }: { novel: Novel }) {
           </div>
         </Statistic>
 
-        <Statistic title="Last Read" value="Never" />
+        <Statistic title="Last Read" value={novel.last_read == null ? "Never" : new Date(novel.last_read).toLocaleString()} />
 
         <Statistic title="Updated At" value={getDate(novel.updated_at)} />
 

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import StatisticsTab from './statistics-tab';
 
 function LibraryItem({novel}: { novel: Novel }) {
+  console.log("Novel: ", novel);
   const router = useRouter();
 
   return (
